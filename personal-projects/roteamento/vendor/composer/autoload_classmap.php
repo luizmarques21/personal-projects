@@ -6,12 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Empresa' => $baseDir . '/Model/Empresa.php',
     'Pessoa' => $baseDir . '/Model/Pessoa.php',
     'PessoaDao' => $baseDir . '/DAO/Pessoa.php',
-    'Roteamento\\DAO\\empresaDAO' => $baseDir . '/DAO/empresaDAO.php',
-    'Roteamento\\Infra\\Collection' => $baseDir . '/Infra/Collection.php',
-    'Roteamento\\Infra\\Session' => $baseDir . '/Infra/Session.php',
-    'Roteamento\\Model\\Empresa' => $baseDir . '/Model/Empresa.php',
+    'Sessao' => $baseDir . '/Infra/Sessao.php',
     'empresaController' => $baseDir . '/Controller/empresaController.php',
+    'empresaDAO' => $baseDir . '/DAO/empresaDAO.php',
     'pessoaController' => $baseDir . '/Controller/Pessoa.php',
 );

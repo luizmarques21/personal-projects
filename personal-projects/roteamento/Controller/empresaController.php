@@ -2,55 +2,73 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Roteamento\Model\Empresa;
-use Roteamento\DAO\empresaDAO;
-
+/**
+ * Class empresaController
+ * @version 1.0.0
+ */
 class empresaController {
 	
-	public function view(): void {
-		include_once __DIR__ . '/../View/empresaView.php';
+	private $oDAO;
+	
+	/**
+	 * empresaController constructor.
+	 * @since 1.0.0
+	 */
+	public function __construct() {
+		$this->oDAO = new empresaDAO();
 	}
 	
-	private function carregarEmpresaDaRequisicao(array $aDados): Empresa {
-			return new Empresa($aDados['cnpj'], $aDados['razaoSocial'], $aDados['nomeFantasia'], $aDados['email']
-				, $aDados['telefone']);
-		}
-
-		public function cadastrar(array $aDados): void {
-			$oEmpresa = $this->carregarEmpresaDaRequisicao($aDados);
-			$oEmpresa->cadastrarEmpresa();
-		}
-		
-
-		public function visualizar(array $aDados): void {
-			$oEmpresaDao = new empresaDAO();
-			$aEmpresa = $oEmpresaDao->visualizarEmpresa($aDados['id']);
-			include_once __DIR__ . '/../View/lista-empresa.php';
-		}
-		
-
-		public function visualizarTodas(): void {
-			include_once __DIR__ . '/../View/lista-empresa.php';
-			$oEmpresaDao = new empresaDAO();
-			$loEmpresaDao = $oEmpresaDao->visualizarTodasEmpresas();
-		}
-		
-
-		public function editar(array $aDados) : void {
-			$oEmpresa = $this->carregarEmpresaDaRequisicao($aDados);
-			$oEmpresa->editarEmpresa($aDados['id']);
-		}
-		
-
-		public function excluir(array $aDados): void {
-			$oEmpresa = $this->carregarEmpresaDaRequisicao($aDados);
-			$oEmpresa->excluirEmpresa($aDados['id']);
-		}
-		
-		public function index() {
-			include_once __DIR__ . '/../View/lista-empresa.php';
-			$oEmpresaDao = new empresaDAO();
-			$loEmpresaDao = $oEmpresaDao->visualizarTodasEmpresas();
-		}
-		
+	/**
+	 * Exibe todas as empresas cadastradas caso não tenha sido passada nenhuma ação
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function index(): void {
+		$aEmpresas = $this->oDAO->findAllEmpresas();
+		include_once __DIR__ . '/../View/listarEmpresas.php';
+		if (empty($aEmpresas))
+			echo '<p><a href="cadastrar">Cadastrar nova empresa</a>';
 	}
+	
+	/**
+	 * Abre a tela de cadastro de empresa
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function cadastrar(): void {
+		include_once __DIR__ . '/../View/inserirEmpresas.php';
+	}
+	
+	/**
+	 * Exclui uma empresa
+	 *
+	 * @param $iID
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function excluir($iID): void {
+		$this->oDAO->deleteEmpresa($iID);
+	}
+	
+	/**
+	 * Abre a tela de edição de uma empresa
+	 *
+	 * @param $iID
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function editar($iID): void {
+		include_once __DIR__ . '/../View/editarEmpresa.php';
+	}
+	
+}

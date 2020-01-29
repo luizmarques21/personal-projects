@@ -1,9 +1,11 @@
 <?php
 
-namespace Roteamento\Model;
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use Roteamento\DAO\empresaDAO as EmpresaDAO;
-
+/**
+ * Class Empresa
+ * @version 1.0.0
+ */
 class Empresa {
 		
 	private $sCnpj;
@@ -11,60 +13,52 @@ class Empresa {
 	private $sNomeFantasia;
 	private $sEmail;
 	private $sTelefone;
-		
+	private $aEmpresa;
+	private $oDAO;
+	
+	/**
+	 * Empresa constructor.
+	 * @param $sCnpj
+	 * @param $sRazaoSocial
+	 * @param $sNomeFantasia
+	 * @param $sEmail
+	 * @param $sTelefone
+	 * @since 1.0.0
+	 */
 	public function __construct($sCnpj, $sRazaoSocial, $sNomeFantasia, $sEmail, $sTelefone) {
 		$this->sCnpj = $sCnpj;
 		$this->sRazaoSocial = $sRazaoSocial;
 		$this->sNomeFantasia = $sNomeFantasia;
 		$this->sEmail = $sEmail;
 		$this->sTelefone = $sTelefone;
-	}
-		
-
-	public function getCnpj(): string {
-		return $this->sCnpj;
-	}
-		
-
-	public function getRazaoSocial(): string {
-		return $this->sRazaoSocial;
+		$this->oDAO = new empresaDAO();
+		$this->aEmpresa = array('cnpj' => $this->sCnpj, 'razao_social' => $this->sRazaoSocial,
+			'nome_fantasia' => $this->sNomeFantasia, 'email' => $this->sEmail, 'telefone' => $this->sTelefone);
 	}
 	
-
-	public function getNomeFantasia(): string {
-		return $this->sNomeFantasia;
-	}
-		
-
-	public function getEmail(): string {
-		return $this->sEmail;
-	}
-		
-
-	public function getTelefone(): string {
-		return $this->sTelefone;
-	}
-		
-
+	/**
+	 * Cadastra uma nova empresa
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
 	public function cadastrarEmpresa(): void {
-		$aEmpresas = array('cnpj' => $this->sCnpj, 'razao social' => $this->sRazaoSocial,
-			'nome fantasia' => $this->sNomeFantasia, 'email' => $this->sEmail, 'telefone' => $this->sTelefone);
-		$oEmpresaDao = new empresaDAO();
-		$oEmpresaDao->inserirEmpresa($aEmpresas);
+		$this->oDAO->saveEmpresa($this->aEmpresa);
 	}
 	
-
+	/**
+	 * Edita uma empresa pelo seu ID
+	 *
+	 * @param int $iId
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
 	public function editarEmpresa(int $iId): void {
-		$aEmpresas = array('cnpj' => $this->sCnpj, 'razao social' => $this->sRazaoSocial,
-			'nome fantasia' => $this->sNomeFantasia, 'email' => $this->sEmail, 'telefone' => $this->sTelefone);
-		$oEmpresaDao = new empresaDAO();
-		$oEmpresaDao->editarEmpresa($iId, $aEmpresas);
-	}
-	
-
-	public function excluirEmpresa(int $iId): void {
-		$oEmpresaDao = new empresaDAO();
-		$oEmpresaDao->excluirEmpresa($iId);
+		$this->oDAO->replaceEmpresa($iId, $this->aEmpresa);
 	}
 	
 }

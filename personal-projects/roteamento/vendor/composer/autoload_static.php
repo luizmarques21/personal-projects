@@ -7,13 +7,12 @@ namespace Composer\Autoload;
 class ComposerStaticInitf6149a92dd1d2ec61e799803620d4a4a
 {
     public static $classMap = array (
+        'Empresa' => __DIR__ . '/../..' . '/Model/Empresa.php',
         'Pessoa' => __DIR__ . '/../..' . '/Model/Pessoa.php',
         'PessoaDao' => __DIR__ . '/../..' . '/DAO/Pessoa.php',
-        'Roteamento\\DAO\\empresaDAO' => __DIR__ . '/../..' . '/DAO/empresaDAO.php',
-        'Roteamento\\Infra\\Collection' => __DIR__ . '/../..' . '/Infra/Collection.php',
-        'Roteamento\\Infra\\Session' => __DIR__ . '/../..' . '/Infra/Session.php',
-        'Roteamento\\Model\\Empresa' => __DIR__ . '/../..' . '/Model/Empresa.php',
+        'Sessao' => __DIR__ . '/../..' . '/Infra/Sessao.php',
         'empresaController' => __DIR__ . '/../..' . '/Controller/empresaController.php',
+        'empresaDAO' => __DIR__ . '/../..' . '/DAO/empresaDAO.php',
         'pessoaController' => __DIR__ . '/../..' . '/Controller/Pessoa.php',
     );
 
