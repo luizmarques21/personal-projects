@@ -1,9 +1,0 @@
-{
-  "DB": {
-    "hostname": "192.168.0.200",
-    "database": "trainee_luiz",
-    "port": 3306,
-    "username": "root",
-    "password": "201710Moobi"
-  }
-}
