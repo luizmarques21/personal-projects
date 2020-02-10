@@ -1,0 +1,39 @@
+<?php include __DIR__ . '/../cabecalho.php'; ?>
+
+<div class="row">
+	<div class="col-md-4">
+		<a href="cadastrar/" class="btn btn-info btn-block">Criar Nova Situação</a>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<?php if (count($aSituacoes) > 0): ?>
+			<table class="table">
+				<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach ($aSituacoes as $aSituacao): ?>
+					<?php $oSituacao = Situacao::createFromArray($aSituacao) ?>
+					<tr>
+						<td><?php echo $oSituacao->getID(); ?></td>
+						<td><?php echo $oSituacao->getNome(); ?></td>
+						<td align="right">
+							<a href="editar/<?php echo $oSituacao->getID() ?>" class="btn btn-info ml-auto" >Editar</a>
+							<a href="excluir/<?php echo $oSituacao->getID() ?>" class="btn btn-danger ml-auto">Excluir</a>
+						</td>
+					</tr>
+				<?php endforeach ?>
+				</tbody>
+			</table>
+		<?php else: ?>
+			<p>Nenhuma situação cadastrada</p>
+		<?php endif; ?>
+	</div>
+</div>
+
+<?php include __DIR__ . '/../rodape.php'; ?>
