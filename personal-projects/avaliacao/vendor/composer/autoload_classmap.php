@@ -6,14 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Autenticador' => $baseDir . '/Model/Autenticador.php',
     'Cargo' => $baseDir . '/Model/Cargo.php',
     'Empresa' => $baseDir . '/Model/Empresa.php',
     'JSONConfig' => $baseDir . '/Infra/JSONConfig.php',
-    'Login' => $baseDir . '/Model/Login.php',
     'MoobiDataBaseHandler' => $baseDir . '/Infra/MoobiDataBaseHandler.php',
     'Sessao' => $baseDir . '/Infra/Sessao.php',
     'Situacao' => $baseDir . '/Model/Situacao.php',
     'Usuario' => $baseDir . '/Model/Usuario.php',
+    'View' => $baseDir . '/Infra/View.php',
     'cargoController' => $baseDir . '/Controller/cargoController.php',
     'cargoDAO' => $baseDir . '/DAO/cargoDAO.php',
     'empresaController' => $baseDir . '/Controller/empresaController.php',

@@ -124,19 +124,6 @@ class Usuario {
 	}
 	
 	/**
-	 * Verifica se a senha informada é igual a senha do usuario
-	 *
-	 * @param string $sSenha
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
-	 * @return bool
-	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
-	 */
-	public function validaSenha(string $sSenha): bool {
-		return password_verify($sSenha, $this->sSenha);
-	}
-	
-	/**
 	 * Define o id
 	 *
 	 * @param int $iID
@@ -188,6 +175,21 @@ class Usuario {
 		} else {
 			$this->codificaSenha();
 		}
+	}
+	
+	/**
+	 * Verifica se um usuario é ADM
+	 *
+	 * @param string $sNome
+	 * @return bool
+	 *
+	 * @throws Exception
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 */
+	public static function isADM(string $sNome): bool {
+		$sTipo = (new usuarioDAO())->findByName($sNome)->getTipo();
+		return $sTipo == 'A' ? true : false;
 	}
 	
 }

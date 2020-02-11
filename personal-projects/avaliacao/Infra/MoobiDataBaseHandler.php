@@ -7,6 +7,7 @@
 class MoobiDataBaseHandler {
 	
 	private $rConexao;
+	private $oConfig;
 	private $bFalha = false;
 	private $sNomeBanco;
 	private $sHost;
@@ -18,15 +19,15 @@ class MoobiDataBaseHandler {
 	 * MoobiDataBaseHandler constructor.
 	 * @since 1.0.0
 	 */
-	public function __construct() {
-		$rConfig = new JSONConfig(__DIR__ . '/.config.json');
-		$rConfig = $rConfig->loadConfig('DB');
+	public function __construct(JSONConfig $oConfig) {
+		$this->oConfig = $oConfig;
+		$aConfig = $this->oConfig->loadConfig('DB');
 		
-		$this->sHost = $rConfig['hostname'];
-		$this->iPorta = $rConfig['port'];
-		$this->sUsuario = $rConfig['username'];
-		$this->sSenha = $rConfig['password'];
-		$this->sNomeBanco = $rConfig['database'];
+		$this->sHost = $aConfig['hostname'];
+		$this->iPorta = $aConfig['port'];
+		$this->sUsuario = $aConfig['username'];
+		$this->sSenha = $aConfig['password'];
+		$this->sNomeBanco = $aConfig['database'];
 		
 		$sDSN = 'mysql:host=' . $this->sHost . ';dbname=' . $this->sNomeBanco . ';port=' . $this->iPorta;
 		try {

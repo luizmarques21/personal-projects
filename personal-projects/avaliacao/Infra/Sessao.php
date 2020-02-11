@@ -7,6 +7,23 @@
 class Sessao {
 	
 	/**
+	 * Inicializa a sessão
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function iniciaSessao(): void {
+		if (session_status() !== PHP_SESSION_ACTIVE)
+			session_start();
+		if (!isset($_SESSION['mensagem']))
+			$_SESSION['mensagem'] = '';
+		if (!isset($_SESSION['logado']))
+			$_SESSION['logado'] = '';
+	}
+	
+	/**
 	 * Registra os dados do usuario logado na sessão
 	 *
 	 * @param $sNome
@@ -16,9 +33,8 @@ class Sessao {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
-	public function registraUsuarioLogado(string $sNome, string $sTipo): void {
-		$_SESSION['logado']['nome'] = $sNome;
-		$_SESSION['logado']['tipo'] = $sTipo;
+	public function registraUsuarioLogado(string $sNome): void {
+		$_SESSION['logado'] = $sNome;
 	}
 	
 	/**
@@ -30,22 +46,7 @@ class Sessao {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function getUsuarioLogado(): string {
-		return $_SESSION['logado']['nome'];
-	}
-	
-	/**
-	 * Retorna se o usuario logado é administrador
-	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
-	 * @return bool
-	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
-	 */
-	public function isADM(): bool {
-		if ($_SESSION['logado']['tipo'] == 'Administrador')
-			return true;
-		else
-			return false;
+		return $_SESSION['logado'];
 	}
 	
 	/**
@@ -59,7 +60,6 @@ class Sessao {
 	public function deslogaUsuario(): void {
 		unset($_SESSION['logado']);
 		$this->clearMensagem();
-		header("Location: /login");
 	}
 	
 	/**

@@ -13,7 +13,7 @@ class empresaDAO {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler();
+		$this->oDBHandler = new MoobiDataBaseHandler(JSONConfig::getInstance());
 	}
 	
 	/**

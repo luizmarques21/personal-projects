@@ -7,6 +7,7 @@
 class loginController {
 	
 	private $oSessao;
+	private $oView;
 	
 	/**
 	 * loginController constructor.
@@ -14,6 +15,7 @@ class loginController {
 	 */
 	public function __construct() {
 		$this->oSessao = new Sessao();
+		$this->oView = new View();
 	}
 	
 	/**
@@ -26,7 +28,8 @@ class loginController {
 	 */
 	public function index(): void {
 		$sTitulo = 'Sindicato dos Trainees - Login';
-		include __DIR__ . '/../View/loginForm.php';
+		$this->oView->exibe('loginForm', [$sTitulo]);
+		//include __DIR__ . '/../View/loginForm.php';
 	}
 	
 	/**
@@ -52,7 +55,7 @@ class loginController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function validaLogin(): void {
-		$oLogin = new Login($_POST['usuario'], $_POST['senha']);
+		$oLogin = new Autenticador($_POST['usuario'], $_POST['senha']);
 		$oUsuario = (new usuarioDAO())->findByUsername($oLogin->getUsuario());
 		$bSenhaValida = $oUsuario->validaSenha($oLogin->getSenha());
 		if (!is_null($oUsuario->getLogin()) && $bSenhaValida == true) {

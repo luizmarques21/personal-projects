@@ -7,14 +7,15 @@ namespace Composer\Autoload;
 class ComposerStaticInit3578481ad67fa219245f95517f97c611
 {
     public static $classMap = array (
+        'Autenticador' => __DIR__ . '/../..' . '/Model/Autenticador.php',
         'Cargo' => __DIR__ . '/../..' . '/Model/Cargo.php',
         'Empresa' => __DIR__ . '/../..' . '/Model/Empresa.php',
         'JSONConfig' => __DIR__ . '/../..' . '/Infra/JSONConfig.php',
-        'Login' => __DIR__ . '/../..' . '/Model/Login.php',
         'MoobiDataBaseHandler' => __DIR__ . '/../..' . '/Infra/MoobiDataBaseHandler.php',
         'Sessao' => __DIR__ . '/../..' . '/Infra/Sessao.php',
         'Situacao' => __DIR__ . '/../..' . '/Model/Situacao.php',
         'Usuario' => __DIR__ . '/../..' . '/Model/Usuario.php',
+        'View' => __DIR__ . '/../..' . '/Infra/View.php',
         'cargoController' => __DIR__ . '/../..' . '/Controller/cargoController.php',
         'cargoDAO' => __DIR__ . '/../..' . '/DAO/cargoDAO.php',
         'empresaController' => __DIR__ . '/../..' . '/Controller/empresaController.php',

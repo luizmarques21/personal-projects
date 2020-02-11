@@ -2,12 +2,15 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('ROOT', 'http://localhost/trainee.luiz/avaliacao/');
+define('ROOT', $_SERVER['HTTP_REFERER'] . '/avaliacao/');
+JSONConfig::setConfigFile(ROOT . 'Infra/.config.json');
 
-if (session_status() !== PHP_SESSION_ACTIVE)
-	session_start();
-else
+$oSessao = new Sessao();
+try {
+	$oSessao->iniciaSessao();
+} catch (Exception $sErro) {
 	header("Location: login", true, 302);
+}
 
 if (!empty($_REQUEST)) {
 	$sClassName = $_REQUEST['controller'] . 'Controller';
