@@ -90,11 +90,7 @@ class MoobiDataBaseHandler {
 	 */
 	public function queryOne(string $sSQL, array $aParams) {
 		$mSTMT = $this->rConexao->prepare($sSQL);
-		$iChave = 1;
-		foreach ($aParams as $aParam) {
-			$mSTMT->bindValue($iChave, $aParam);
-			$iChave++;
-		}
+		$mSTMT = $this->bindParametros($mSTMT, $aParams);
 		$mSTMT->execute();
 		return $mSTMT->fetch();
 	}
@@ -111,12 +107,8 @@ class MoobiDataBaseHandler {
 	 */
 	public function query(string $sSQL, array $aParams = null): array {
 		$mSTMT = $this->rConexao->prepare($sSQL);
-		$iChave = 1;
 		if ($aParams)
-			foreach ($aParams as $aParam) {
-				$mSTMT->bindValue($iChave, $aParam);
-				$iChave++;
-			}
+			$mSTMT = $this->bindParametros($mSTMT, $aParams);
 		$mSTMT->execute();
 		return $mSTMT->fetchAll();
 	}
@@ -133,13 +125,28 @@ class MoobiDataBaseHandler {
 	 */
 	public function execute(string $sSQL, array $aParams): bool {
 		$mSTMT = $this->rConexao->prepare($sSQL);
-		$iChave = 1;
 		if ($aParams)
-			foreach ($aParams as $aParam) {
-				$mSTMT->bindValue($iChave, $aParam);
-				$iChave++;
-			}
+			$mSTMT = $this->bindParametros($mSTMT, $aParams);
 		return $mSTMT->execute();
+	}
+	
+	/**
+	 * Associa os parametros à consulta SQL que irá ser executada
+	 *
+	 * @param PDOStatement $mStatement
+	 * @param array $aParametros
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return PDOStatement
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	private function bindParametros(PDOStatement $mStatement, array $aParametros): PDOStatement {
+		$iChave = 1;
+		foreach ($aParametros as $aParametro) {
+			$mStatement->bindValue($iChave, $aParametro);
+			$iChave++;
+		}
+		return $mStatement;
 	}
 	
 }

@@ -56,7 +56,7 @@ ALTER TABLE dpe_dependente ADD CONSTRAINT fk_dependente_filiado FOREIGN KEY (flo
 
 
 INSERT INTO usi_usuario (usi_login, usi_senha, usi_tipo_usuario) 
-VALUES ('admin', '$2y$10$Bye97ZNOjN4szwH4EDJ1AeH3zFR4ZWMo0wPxTVmlnbV2dtyUd/vKu', 'Administrador');
+VALUES ('admin', '$2y$10$Bye97ZNOjN4szwH4EDJ1AeH3zFR4ZWMo0wPxTVmlnbV2dtyUd/vKu', 'A');
 
 INSERT INTO ems_empresa (ems_nome) VALUES ('Flamengo');
 INSERT INTO ems_empresa (ems_nome) VALUES ('Vasco');

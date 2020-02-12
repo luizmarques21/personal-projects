@@ -6,6 +6,8 @@
  */
 class Sessao {
 	
+	private $bSessaoAtiva = false;
+	
 	/**
 	 * Inicializa a sessão
 	 *
@@ -15,8 +17,10 @@ class Sessao {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function iniciaSessao(): void {
-		if (session_status() !== PHP_SESSION_ACTIVE)
+		if (session_status() !== PHP_SESSION_ACTIVE) {
 			session_start();
+			$this->bSessaoAtiva = true;
+		}
 		if (!isset($_SESSION['mensagem']))
 			$_SESSION['mensagem'] = '';
 		if (!isset($_SESSION['logado']))
@@ -99,4 +103,7 @@ class Sessao {
 		unset($_SESSION['mensagem']);
 	}
 	
+	public function getSessaoAtiva() {
+		return $this->bSessaoAtiva;
+	}
 }

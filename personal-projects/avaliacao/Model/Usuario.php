@@ -119,7 +119,7 @@ class Usuario {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
-	private function getSenha(): string {
+	public function getSenha(): string {
 		return $this->sSenha;
 	}
 	
@@ -161,14 +161,16 @@ class Usuario {
 	}
 	
 	/**
-	 * Verifica se a senha informada está vazia
+	 * Verifica se o usuario deixou a senha em branco na tela de atualização
+	 * Em caso positivo, a senha já cadastrada permanece inalterada
+	 * Em casa negativo, é aplicado o hash na nova senha para posterior atualização no banco
 	 *
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
-	private function verificaSenhaVazia(): void {
+	private function atualizaSenha(): void {
 		if (strlen($this->sSenha) <= 0) {
 			$oUsuario = $this->oDAO->findByID($this->iID);
 			$this->sSenha = $oUsuario->getSenha();
@@ -188,7 +190,7 @@ class Usuario {
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public static function isADM(string $sNome): bool {
-		$sTipo = (new usuarioDAO())->findByName($sNome)->getTipo();
+		$sTipo = (new usuarioDAO())->findByUsername($sNome)->getTipo();
 		return $sTipo == 'A' ? true : false;
 	}
 	

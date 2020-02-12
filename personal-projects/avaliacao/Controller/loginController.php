@@ -27,9 +27,8 @@ class loginController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function index(): void {
-		$sTitulo = 'Sindicato dos Trainees - Login';
-		$this->oView->exibe('loginForm', [$sTitulo]);
-		//include __DIR__ . '/../View/loginForm.php';
+		$this->oView->setTitulo('Sindicato dos Trainees - Login');
+		$this->oView->exibeTemplate('loginForm.php');
 	}
 	
 	/**
@@ -41,9 +40,10 @@ class loginController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function home(): void {
-		$sTitulo = 'Sindicato dos trainees - Home';
+		$this->oView->setTitulo('Sindicato dos Trainees - Home');
 		$sLogado = $this->oSessao->getUsuarioLogado();
-		include __DIR__ . '/../View/home.php';
+		$this->oView->adicionaVariavel('sLogado', $sLogado);
+		$this->oView->exibeTemplate('home.php');
 	}
 	
 	/**
@@ -55,16 +55,19 @@ class loginController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function validaLogin(): void {
-		$oLogin = new Autenticador($_POST['usuario'], $_POST['senha']);
-		$oUsuario = (new usuarioDAO())->findByUsername($oLogin->getUsuario());
-		$bSenhaValida = $oUsuario->validaSenha($oLogin->getSenha());
-		if (!is_null($oUsuario->getLogin()) && $bSenhaValida == true) {
-			$this->oSessao->registraUsuarioLogado($oUsuario->getLogin(), $oUsuario->getTipo());
-			$this->oSessao->clearMensagem();
-			header("Location: home");
-		} else {
-			$this->oSessao->setMensagem('Usuario e/ou senha invalidos');
-			header("Location: ../");
+		try{
+			$oAutenticador = new Autenticador($_POST['usuario'], $_POST['senha']);
+			$oUsuario = (new usuarioDAO())->findByUsername($oAutenticador->getUsuario());
+			if (!$oAutenticador->validaSenha($oUsuario->getSenha()))
+				throw new Exception('Senha invalida');
+			$this->oSessao->registraUsuarioLogado($oUsuario->getLogin());
+			$this->home();
+			//header("Location: ../../home");
+		} catch(Exception $oEx) {
+			$this->oView->setMensagem($oEx->getMessage());
+			$this->index();
+			//$this->oView->exibeTemplate('loginForm.php');
+			//header("refresh: 1;url=../");
 		}
 	}
 	

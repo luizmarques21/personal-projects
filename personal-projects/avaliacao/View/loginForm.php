@@ -10,28 +10,25 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h1><?= $aDados[0]; ?></h1>
+        <h1><?= $sTitulo; ?></h1>
     </div>
 	
-	<?php if (isset($_SESSION['mensagem'])): ?>
+	<?php if (strlen($sMensagem) > 0): ?>
         <div class="alert alert-primary">
-			<?php echo $this->oSessao->getMensagem() ?>
+			<?php echo $sMensagem ?>
         </div>
-		<?php
-		$this->oSessao->clearMensagem();
-	endif;
-	?>
+    <?php endif; ?>
+    <form action="validalogin" method="post">
+        <div class="form-group">
+            <label for="usuario">Login</label>
+            <input type="text" name="usuario" id="usuario" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" name="senha" id="senha" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
 </div>
-<form action="login/validalogin" method="post">
-	<div class="form-group">
-		<label for="usuario">Login</label>
-		<input type="text" name="usuario" id="usuario" class="form-control">
-	</div>
-	<div class="form-group">
-		<label for="senha">Senha</label>
-		<input type="password" name="senha" id="senha" class="form-control">
-	</div>
-	<button type="submit" class="btn btn-primary">Entrar</button>
-</form>
 
 <?php include 'rodape.php'; ?>

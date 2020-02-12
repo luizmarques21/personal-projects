@@ -28,6 +28,8 @@ class usuarioDAO {
 	public function findByUsername(string $sUser): Usuario {
 		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_login = ?';
 		$aResultado = $this->oDBHandler->queryOne($sQuery, [$sUser]);
+		if (is_bool($aResultado))
+			throw new Exception('Usuario não encontrado');
 		return Usuario::createFromArray($aResultado);
 	}
 	
