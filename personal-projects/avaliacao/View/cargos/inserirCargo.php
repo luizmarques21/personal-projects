@@ -1,5 +1,3 @@
-<?php include __DIR__ . '/../cabecalho.php' ?>
-
 <form action="../postcadastra/" method="post">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
@@ -11,5 +9,3 @@
 		</div>
 	</div>
 </form>
-
-<?php include __DIR__ . '/../rodape.php' ?>

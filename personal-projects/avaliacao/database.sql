@@ -18,24 +18,24 @@ CREATE TABLE sto_situacao (
 
 CREATE TABLE usi_usuario (
 	usi_id INT NOT NULL AUTO_INCREMENT,
-	usi_login VARCHAR(255),
-	usi_senha VARCHAR(255),
-	usi_tipo_usuario VARCHAR(255),
+	usi_login VARCHAR(100),
+	usi_senha VARCHAR(60),
+	usi_tipo_usuario CHAR(1),
 	PRIMARY KEY(usi_id)
 );
 
 CREATE TABLE flo_filiado (
 	flo_id INT NOT NULL AUTO_INCREMENT,
 	flo_nome VARCHAR(255),
-	flo_cpf VARCHAR(255),
-	flo_rg VARCHAR(255),
+	flo_cpf VARCHAR(14),
+	flo_rg VARCHAR(8),
 	flo_data_nascimento DATE,
 	ems_id INT,
 	cro_id INT,
 	sto_id INT,
 	flo_data_atualizacao DATE,
-	flo_residencial VARCHAR(255),
-	flo_celular VARCHAR(255),
+	flo_residencial VARCHAR(9),
+	flo_celular VARCHAR(10),
 	PRIMARY KEY(flo_id)
 );
 
@@ -43,7 +43,7 @@ CREATE TABLE dpe_dependente (
 	dpe_id INT NOT NULL AUTO_INCREMENT,
 	dpe_nome VARCHAR(255),
 	dpe_data_nascimento DATE,
-	dpe_grau_parentesco VARCHAR(255),
+	dpe_grau_parentesco VARCHAR(60),
 	flo_id INT,
 	PRIMARY KEY(dpe_id)
 );

@@ -13,12 +13,15 @@
         <h1><?= $sTitulo; ?></h1>
     </div>
 	
-	<?php if (strlen($sMensagem) > 0): ?>
+	<?php if (strlen(Sessao::getMensagem()) > 0): ?>
         <div class="alert alert-primary">
-			<?php echo $sMensagem ?>
+			<?php
+                echo Sessao::getMensagem();
+                Sessao::setMensagem('');
+            ?>
         </div>
     <?php endif; ?>
-    <form action="validalogin" method="post">
+    <form action="<?php echo WEBROOT ?>login/validalogin" method="post">
         <div class="form-group">
             <label for="usuario">Login</label>
             <input type="text" name="usuario" id="usuario" class="form-control">
@@ -30,5 +33,3 @@
         <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
 </div>
-
-<?php include 'rodape.php'; ?>

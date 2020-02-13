@@ -56,7 +56,7 @@ class Usuario {
 	 */
 	public function replaceUsuario(int $iID): void {
 		$this->setID($iID);
-		$this->verificaSenhaVazia();
+		$this->atualizaSenha();
 		$this->oDAO->replace($this->createToArray(), $iID);
 	}
 	

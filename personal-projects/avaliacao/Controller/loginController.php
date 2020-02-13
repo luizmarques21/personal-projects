@@ -43,6 +43,7 @@ class loginController {
 		$this->oView->setTitulo('Sindicato dos Trainees - Home');
 		$sLogado = $this->oSessao->getUsuarioLogado();
 		$this->oView->adicionaVariavel('sLogado', $sLogado);
+		$this->oView->exibeCabecalho('cabecalho.php');
 		$this->oView->exibeTemplate('home.php');
 	}
 	
@@ -61,13 +62,10 @@ class loginController {
 			if (!$oAutenticador->validaSenha($oUsuario->getSenha()))
 				throw new Exception('Senha invalida');
 			$this->oSessao->registraUsuarioLogado($oUsuario->getLogin());
-			$this->home();
-			//header("Location: ../../home");
+			header("Location: home/");
 		} catch(Exception $oEx) {
-			$this->oView->setMensagem($oEx->getMessage());
+			$this->oSessao->setMensagem($oEx->getMessage());
 			$this->index();
-			//$this->oView->exibeTemplate('loginForm.php');
-			//header("refresh: 1;url=../");
 		}
 	}
 	

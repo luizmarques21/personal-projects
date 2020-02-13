@@ -54,7 +54,7 @@ class Autenticador {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function validaSenha(string $sSenha): bool {
-		return password_verify($sSenha, $this->sSenha);
+		return password_verify($this->sSenha, $sSenha);
 	}
 	
 }

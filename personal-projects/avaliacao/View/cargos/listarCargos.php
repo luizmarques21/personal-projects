@@ -1,5 +1,3 @@
-<?php include __DIR__ . '/../cabecalho.php'; ?>
-
 <div class="row">
 	<div class="col-md-4">
 		<a href="cadastrar/" class="btn btn-info btn-block">Criar Novo Cargo</a>
@@ -35,5 +33,3 @@
 		<?php endif; ?>
 	</div>
 </div>
-
-<?php include __DIR__ . '/../rodape.php'; ?>

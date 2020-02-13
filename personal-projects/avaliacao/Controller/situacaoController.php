@@ -7,6 +7,7 @@
 class situacaoController {
 	
 	private $oSessao;
+	private $oView;
 	
 	/**
 	 * situacaoController constructor.
@@ -14,6 +15,7 @@ class situacaoController {
 	 */
 	public function __construct() {
 		$this->oSessao = new Sessao();
+		$this->oView = new View();
 	}
 	
 	/**
@@ -25,9 +27,16 @@ class situacaoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function index(): void {
-		$sTitulo = 'Situações';
-		$aSituacoes = (new situacaoDAO())->findAll();
-		include __DIR__ . '/../View/situacoes/listarSituacoes.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$aSituacoes = (new situacaoDAO())->findAll();
+			$this->oView->setTitulo('Situações');
+			$this->oView->adicionaVariavel('aSituacoes', $aSituacoes);
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('situacoes/listarSituacoes.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -39,12 +48,18 @@ class situacaoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function cadastrar(): void {
-		$sTitulo = 'Criar nova Situacao';
-		include __DIR__ . '/../View/situacoes/inserirSituacao.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$this->oView->setTitulo('Criar nova Situação');
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('situacoes/inserirSituacao.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
-	 * Exclui um cargo
+	 * Exclui uma situacao
 	 *
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
@@ -52,10 +67,15 @@ class situacaoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function excluir(): void {
-		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
-		$oSituacao->deleteSituacao();
-		$this->oSessao->setMensagem('Situacao excluida com sucesso');
-		header("Location: ../../situacao/");
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
+			$oSituacao->deleteSituacao();
+			$this->oSessao->setMensagem('Situacao excluida com sucesso');
+			header("Location: " . WEBROOT . "situacao/");
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -67,9 +87,16 @@ class situacaoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function editar(): void {
-		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
-		$sTitulo = 'Editar Situacao';
-		include __DIR__ . '/../View/situacoes/editarSituacao.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
+			$this->oView->setTitulo('Editar Situacao');
+			$this->oView->adicionaVariavel('oSituacao', $oSituacao);
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('situacoes/editarSituacao.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -84,7 +111,7 @@ class situacaoController {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
 		$oSituacao->saveSituacao();
 		$this->oSessao->setMensagem('Situacao cadastrada com sucesso');
-		header("Location: ../../situacao/");
+		header("Location: " . WEBROOT . "situacao/");
 	}
 	
 	/**
@@ -99,7 +126,12 @@ class situacaoController {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
 		$oSituacao->replaceSituacao($_POST['id']);
 		$this->oSessao->setMensagem('Situação atualizada com sucesso');
-		header("Location: ../../situacao/");
+		header("Location: " . WEBROOT . "situacao/");
+	}
+	
+	private function chamaCabecalho() {
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeCabecalho('cabecalho.php');
 	}
 	
 }

@@ -7,6 +7,7 @@
 class usuarioController {
 	
 	private $oSessao;
+	private $oView;
 	
 	/**
 	 * usuarioController constructor.
@@ -14,62 +15,112 @@ class usuarioController {
 	 */
 	public function __construct() {
 		$this->oSessao = new Sessao();
+		$this->oView =  new View();
 	}
 	
 	/**
 	 * Exibe a tela inicial
 	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
+	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function index(): void {
-		$sTitulo = 'Usuarios';
-		$aUsuarios = (new usuarioDAO())->findAll();
-		include __DIR__ . '/../View/usuarios/listarUsuarios.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
+				$aUsuarios = (new usuarioDAO())->findAll();
+				$this->oView->setTitulo('Usuarios');
+				$this->oView->adicionaVariavel('aUsuarios', $aUsuarios);
+				$this->chamaCabecalho();
+				$this->oView->exibeTemplate('usuarios/listarUsuarios.php');
+			} else {
+				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
+				header("Location: " . WEBROOT . "login/home/");
+			}
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
 	 * Exibe a tela de cadastro de usuario
 	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
+	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function cadastrar(): void {
-		$sTitulo = 'Criar novo usuario';
-		include __DIR__ . '/../View/usuarios/inserirUsuario.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
+				$this->oView->setTitulo('Criar novo usuario');
+				$this->chamaCabecalho();
+				$this->oView->exibeTemplate('usuarios/inserirUsuario.php');
+			} else {
+				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
+				header("Location: " . WEBROOT . "login/home/");
+			}
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
 	 * Exclui um usuario
 	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
+	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function excluir(): void {
-		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
-		$oUsuario->deleteUsuario();
-		$this->oSessao->setMensagem('Usuario excluido com sucesso');
-		header("Location: ../../usuario/");
+		if ($this->oSessao->getUsuarioAtivo()) {
+			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
+				$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
+				$oUsuario->deleteUsuario();
+				$this->oSessao->setMensagem('Usuario excluido com sucesso');
+				header("Location: " . WEBROOT . "usuario/");
+			} else {
+				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
+				header("Location: " . WEBROOT . "login/home/");
+			}
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
 	 * Exibe a tela de edição do usuario
 	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
+	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
-		$sTitulo = 'Editar Usuario';
-		include __DIR__ . '/../View/usuarios/editarUsuario.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
+				$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
+				$this->oView->setTitulo('Editar Usuario');
+				$this->oView->adicionaVariavel('oUsuario', $oUsuario);
+				$this->chamaCabecalho();
+				$this->oView->exibeTemplate('usuarios/editarUsuario.php');
+			} else {
+				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
+				header("Location: " . WEBROOT . "login/home/");
+			}
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -97,7 +148,7 @@ class usuarioController {
 		$oUsuario = new Usuario($_POST['login'], $_POST['senha'], $_POST['tipo_usuario']);
 		$oUsuario->saveUsuario();
 		$this->oSessao->setMensagem('Usuario cadastrado com sucesso!');
-		header("Location: ../../usuario/");
+		header("Location: " . WEBROOT . "usuario/");
 	}
 	
 	/**
@@ -112,7 +163,12 @@ class usuarioController {
 		$oUsuario = new Usuario($_POST['login'], $_POST['senha'], $_POST['tipo_usuario']);
 		$oUsuario->replaceUsuario($_POST['id']);
 		$this->oSessao->setMensagem('Usuario atualizado com sucesso!');
-		header("Location: ../../usuario/");
+		header("Location: " . WEBROOT . "usuario/");
+	}
+	
+	private function chamaCabecalho() {
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeCabecalho('cabecalho.php');
 	}
 	
 }

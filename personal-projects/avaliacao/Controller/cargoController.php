@@ -7,6 +7,7 @@
 class cargoController {
 	
 	private $oSessao;
+	private $oView;
 	
 	/**
 	 * cargoController constructor.
@@ -14,6 +15,7 @@ class cargoController {
 	 */
 	public function __construct() {
 		$this->oSessao = new Sessao();
+		$this->oView = new View();
 	}
 	
 	/**
@@ -25,9 +27,16 @@ class cargoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function index(): void {
-		$sTitulo = 'Cargos';
-		$aCargos = (new cargoDAO())->findAll();
-		include __DIR__ . '/../View/cargos/listarCargos.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$aCargos = (new cargoDAO())->findAll();
+			$this->oView->setTitulo('Cargos');
+			$this->oView->adicionaVariavel('aCargos', $aCargos);
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('cargos/listarCargos.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -39,8 +48,14 @@ class cargoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function cadastrar(): void {
-		$sTitulo = 'Criar novo cargo';
-		include __DIR__ . '/../View/cargos/inserirCargo.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$this->oView->setTitulo('Criar novo cargo');
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('cargos/inserirCargo.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -52,10 +67,15 @@ class cargoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function excluir(): void {
-		$oCargo = (new cargoDAO())->findByID($_GET['id']);
-		$oCargo->deleteCargo();
-		$this->oSessao->setMensagem('Cargo excluido com sucesso');
-		header("Location: ../../cargo/");
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$oCargo = (new cargoDAO())->findByID($_GET['id']);
+			$oCargo->deleteCargo();
+			$this->oSessao->setMensagem('Cargo excluido com sucesso');
+			header("Location: " . WEBROOT . "cargo/");
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -67,9 +87,16 @@ class cargoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function editar(): void {
-		$oCargo = (new cargoDAO())->findByID($_GET['id']);
-		$sTitulo = 'Editar Cargo';
-		include __DIR__ . '/../View/cargos/editarCargo.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$oCargo = (new cargoDAO())->findByID($_GET['id']);
+			$this->oView->setTitulo('Editar cargo');
+			$this->oView->adicionaVariavel('oCargo', $oCargo);
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('cargos/editarCargo.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -84,7 +111,7 @@ class cargoController {
 		$oCargo = new Cargo($_POST['nome_cargo']);
 		$oCargo->saveCargo();
 		$this->oSessao->setMensagem('Cargo cadastrado com sucesso');
-		header("Location: ../../cargo/");
+		header("Location: " . WEBROOT . "cargo/");
 	}
 	
 	/**
@@ -99,7 +126,12 @@ class cargoController {
 		$oCargo = new Cargo($_POST['nome_cargo']);
 		$oCargo->replaceCargo($_POST['id']);
 		$this->oSessao->setMensagem('Cargo atualizado com sucesso');
-		header("Location: ../../cargo/");
+		header("Location: " . WEBROOT . "cargo/");
+	}
+	
+	private function chamaCabecalho() {
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeCabecalho('cabecalho.php');
 	}
 	
 }

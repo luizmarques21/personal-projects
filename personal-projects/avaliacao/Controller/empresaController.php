@@ -7,6 +7,7 @@
 class empresaController {
 	
 	private $oSessao;
+	private $oView;
 	
 	/**
 	 * empresaController constructor.
@@ -14,6 +15,7 @@ class empresaController {
 	 */
 	public function __construct() {
 		$this->oSessao = new Sessao();
+		$this->oView = new View();
 	}
 	
 	/**
@@ -25,9 +27,16 @@ class empresaController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function index(): void {
-		$sTitulo = 'Empresas';
-		$aEmpresas = (new empresaDAO())->findAll();
-		include __DIR__ . '/../View/empresas/listarEmpresas.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$aEmpresas = (new empresaDAO())->findAll();
+			$this->oView->setTitulo('Empresas');
+			$this->oView->adicionaVariavel('aEmpresas', $aEmpresas);
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('empresas/listarEmpresas.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -39,8 +48,14 @@ class empresaController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function cadastrar(): void {
-		$sTitulo = 'Criar nova empresa';
-		include __DIR__ . '/../View/empresas/inserirEmpresa.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$this->oView->setTitulo('Criar nova empresa');
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('empresas/inserirEmpresa.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -53,10 +68,15 @@ class empresaController {
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function excluir(): void {
-		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
-		$oEmpresa->deleteEmpresa();
-		$this->oSessao->setMensagem('Empresa excluida com sucesso');
-		header("Location: ../../empresa/");
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
+			$oEmpresa->deleteEmpresa();
+			$this->oSessao->setMensagem('Empresa excluida com sucesso');
+			header("Location: " . WEBROOT . "empresa/");
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -69,9 +89,16 @@ class empresaController {
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
-		$sTitulo = 'Editar empresa';
-		include __DIR__ . '/../View/empresas/editarEmpresa.php';
+		if ($this->oSessao->getUsuarioAtivo()) {
+			$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
+			$this->oView->setTitulo('Editar empresa');
+			$this->oView->adicionaVariavel('oEmpresa', $oEmpresa);
+			$this->chamaCabecalho();
+			$this->oView->exibeTemplate('empresas/editarEmpresa.php');
+		} else {
+			$this->oSessao->setMensagem('Usuario precisa estar logado');
+			header("Location: " . WEBROOT . "login/");
+		}
 	}
 	
 	/**
@@ -86,7 +113,7 @@ class empresaController {
 		$oEmpresa = new Empresa($_POST['nome_empresa']);
 		$oEmpresa->saveEmpresa();
 		$this->oSessao->setMensagem('Empresa cadastrada com sucesso');
-		header("Location: ../../empresa/");
+		header("Location: ". WEBROOT . "empresa/");
 	}
 	
 	/**
@@ -102,6 +129,11 @@ class empresaController {
 		$oEmpresa->replaceEmpresa($_POST['id']);
 		$this->oSessao->setMensagem('Empresa atualizada com sucesso');
 		header("Location: ../../empresa/");
+	}
+	
+	private function chamaCabecalho() {
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeCabecalho('cabecalho.php');
 	}
 	
 }

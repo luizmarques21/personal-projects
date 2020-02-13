@@ -14,7 +14,7 @@
                 <a class="nav-link" href="<?php echo WEBROOT; ?>login/home/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Filiados</a>
+                <a class="nav-link" href="<?php echo WEBROOT; ?>filiado/">Filiados</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo WEBROOT; ?>empresa/">Empresas</a>
@@ -44,11 +44,11 @@
 		<h1><?= $sTitulo; ?></h1>
 	</div>
 	
-	<?php if (isset($sMensagem)): ?>
+	<?php if (strlen(Sessao::getMensagem()) > 0): ?>
 		<div class="alert alert-primary">
-			<?php echo $sMensagem ?>
+			<?php
+                echo Sessao::getMensagem();
+			    Sessao::setMensagem('');
+		    ?>
 		</div>
-		<?php
-		$this->oSessao->clearMensagem();
-	endif;
-	?>
+    <?php endif; ?>
