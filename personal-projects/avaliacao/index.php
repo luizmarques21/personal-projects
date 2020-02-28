@@ -5,9 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 define('ROOT', '/var/www/html/trainee.luiz/avaliacao/');
 define('WEBROOT', 'http://localhost/trainee.luiz/avaliacao/');
 
-JSONConfig::setConfigFile(ROOT . 'Infra/.config.json');
-
-$oSessao = new Sessao();
+$oSessao = DependencyContainer::getSessao();
 $oSessao->iniciaSessao();
 
 if (!empty($_REQUEST)) {

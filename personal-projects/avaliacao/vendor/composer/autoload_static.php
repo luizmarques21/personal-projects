@@ -9,6 +9,7 @@ class ComposerStaticInit3578481ad67fa219245f95517f97c611
     public static $classMap = array (
         'Autenticador' => __DIR__ . '/../..' . '/Model/Autenticador.php',
         'Cargo' => __DIR__ . '/../..' . '/Model/Cargo.php',
+        'DependencyContainer' => __DIR__ . '/../..' . '/Infra/DependencyContainer.php',
         'Empresa' => __DIR__ . '/../..' . '/Model/Empresa.php',
         'Filiado' => __DIR__ . '/../..' . '/Model/Filiado.php',
         'JSONConfig' => __DIR__ . '/../..' . '/Infra/JSONConfig.php',

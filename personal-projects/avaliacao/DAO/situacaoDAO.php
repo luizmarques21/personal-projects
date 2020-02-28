@@ -11,9 +11,10 @@ class situacaoDAO {
 	/**
 	 * situacaoDAO constructor.
 	 * @since 1.0.0
+	 * implementação do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler(JSONConfig::getInstance());
+		$this->oDBHandler = DependencyContainer::getDBHandler(); //new MoobiDataBaseHandler(JSONConfig::getInstance());
 	}
 	
 	/**

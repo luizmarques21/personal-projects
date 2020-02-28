@@ -25,11 +25,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo WEBROOT; ?>situacao/">Situações</a>
             </li>
-            <?php if (Usuario::isADM($sLogado) == true): ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo WEBROOT; ?>usuario/">Usuarios</a>
             </li>
-            <?php endif; ?>
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
@@ -41,14 +39,14 @@
 
 <div class="container">
 	<div class="jumbotron">
-		<h1><?= $sTitulo; ?></h1>
+		<h1><?php echo $sTitulo; ?></h1>
 	</div>
 	
 	<?php if (strlen(Sessao::getMensagem()) > 0): ?>
 		<div class="alert alert-primary">
 			<?php
                 echo Sessao::getMensagem();
-			    Sessao::setMensagem('');
-		    ?>
+                Sessao::setMensagem('');
+            ?>
 		</div>
     <?php endif; ?>

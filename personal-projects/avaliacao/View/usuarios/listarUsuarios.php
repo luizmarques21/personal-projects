@@ -13,6 +13,7 @@
 					<th>ID</th>
 					<th>Login</th>
 					<th>Tipo</th>
+                    <th></th>
 				</tr>
 				</thead>
 				<tbody>

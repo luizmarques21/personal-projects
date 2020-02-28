@@ -2,7 +2,7 @@
 
 /**
  * Class MoobiDataBaseHandler
- * @version 1.0.0
+ * @version 1.1.0
  */
 class MoobiDataBaseHandler {
 	
@@ -17,7 +17,8 @@ class MoobiDataBaseHandler {
 	
 	/**
 	 * MoobiDataBaseHandler constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição de versionamento da classe
+	 * @since 1.1.0 - Feita injeção de dependencia das configurações
 	 */
 	public function __construct(JSONConfig $oConfig) {
 		$this->oConfig = $oConfig;
@@ -87,6 +88,7 @@ class MoobiDataBaseHandler {
 	 * @return array
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Adcionada chamada ao metodo bindParametros
 	 */
 	public function queryOne(string $sSQL, array $aParams) {
 		$mSTMT = $this->rConexao->prepare($sSQL);
@@ -104,6 +106,7 @@ class MoobiDataBaseHandler {
 	 * @return array
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Adicionada chamada ao metodo bindParametros
 	 */
 	public function query(string $sSQL, array $aParams = null): array {
 		$mSTMT = $this->rConexao->prepare($sSQL);
@@ -122,6 +125,7 @@ class MoobiDataBaseHandler {
 	 * @return bool
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Adicionada chamada ao metodo bindParametros
 	 */
 	public function execute(string $sSQL, array $aParams): bool {
 		$mSTMT = $this->rConexao->prepare($sSQL);
@@ -138,7 +142,7 @@ class MoobiDataBaseHandler {
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return PDOStatement
 	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Definição do versionamento da classe
 	 */
 	private function bindParametros(PDOStatement $mStatement, array $aParametros): PDOStatement {
 		$iChave = 1;

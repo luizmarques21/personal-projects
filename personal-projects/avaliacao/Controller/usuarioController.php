@@ -2,7 +2,7 @@
 
 /**
  * Class usuarioController
- * @version 1.0.0
+ * @version 1.1.0
  */
 class usuarioController {
 	
@@ -11,11 +11,13 @@ class usuarioController {
 	
 	/**
 	 * usuarioController constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição de versionamento da classe
+	 * @since 1.1.0 - Implementado uso do DC
 	 */
 	public function __construct() {
-		$this->oSessao = new Sessao();
-		$this->oView =  new View();
+		DependencyContainer::checaUsuarioAtivo();
+		$this->oSessao = DependencyContainer::getSessao();
+		$this->oView =  DependencyContainer::getView();
 	}
 	
 	/**
@@ -25,24 +27,17 @@ class usuarioController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removido metodo chamaCabecalho e
+	 * alterada a verificação do privilegio de usuario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function index(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
-				$aUsuarios = (new usuarioDAO())->findAll();
-				$this->oView->setTitulo('Usuarios');
-				$this->oView->adicionaVariavel('aUsuarios', $aUsuarios);
-				$this->chamaCabecalho();
-				$this->oView->exibeTemplate('usuarios/listarUsuarios.php');
-			} else {
-				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
-				header("Location: " . WEBROOT . "login/home/");
-			}
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		DependencyContainer::checaUsuarioADM();
+		$aUsuarios = (new usuarioDAO())->findAll();
+		$this->oView->setTitulo('Usuarios');
+		$this->oView->adicionaVariavel('aUsuarios', $aUsuarios);
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeTemplate('usuarios/listarUsuarios.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -52,22 +47,15 @@ class usuarioController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Remocao do metodo chamaCabecalho e
+	 * alterada a verificação do privilegio do usuario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function cadastrar(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
-				$this->oView->setTitulo('Criar novo usuario');
-				$this->chamaCabecalho();
-				$this->oView->exibeTemplate('usuarios/inserirUsuario.php');
-			} else {
-				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
-				header("Location: " . WEBROOT . "login/home/");
-			}
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		DependencyContainer::checaUsuarioADM();
+		$this->oView->setTitulo('Criar novo usuario');
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeTemplate('usuarios/inserirUsuario.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -77,23 +65,15 @@ class usuarioController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterada a verificação do privilegio do usuario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function excluir(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
-				$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
-				$oUsuario->deleteUsuario();
-				$this->oSessao->setMensagem('Usuario excluido com sucesso');
-				header("Location: " . WEBROOT . "usuario/");
-			} else {
-				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
-				header("Location: " . WEBROOT . "login/home/");
-			}
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		DependencyContainer::checaUsuarioADM();
+		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
+		$oUsuario->deleteUsuario();
+		$this->oSessao->setMensagem('Usuario excluido com sucesso');
+		header("Location: " . WEBROOT . "usuario/");
 	}
 	
 	/**
@@ -103,24 +83,17 @@ class usuarioController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removido metodo chamaCabecalho e
+	 * alterada a verificação do privilegio do usuario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			if (Usuario::isADM($this->oSessao->getUsuarioLogado())) {
-				$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
-				$this->oView->setTitulo('Editar Usuario');
-				$this->oView->adicionaVariavel('oUsuario', $oUsuario);
-				$this->chamaCabecalho();
-				$this->oView->exibeTemplate('usuarios/editarUsuario.php');
-			} else {
-				$this->oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
-				header("Location: " . WEBROOT . "login/home/");
-			}
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		DependencyContainer::checaUsuarioADM();
+		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
+		$this->oView->setTitulo('Editar Usuario');
+		$this->oView->adicionaVariavel('oUsuario', $oUsuario);
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeTemplate('usuarios/editarUsuario.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -164,11 +137,6 @@ class usuarioController {
 		$oUsuario->replaceUsuario($_POST['id']);
 		$this->oSessao->setMensagem('Usuario atualizado com sucesso!');
 		header("Location: " . WEBROOT . "usuario/");
-	}
-	
-	private function chamaCabecalho() {
-		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-		$this->oView->exibeCabecalho('cabecalho.php');
 	}
 	
 }

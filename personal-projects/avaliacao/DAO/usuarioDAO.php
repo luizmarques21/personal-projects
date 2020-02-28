@@ -2,7 +2,7 @@
 
 /**
  * Class usuarioDAO
- * @version 1.0.0
+ * @version 1.1.0
  */
 class usuarioDAO {
 	
@@ -10,20 +10,22 @@ class usuarioDAO {
 	
 	/**
 	 * usuarioDAO constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler(JSONConfig::getInstance());
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	/**
 	 * Pesquisa um usuario pelo nome
 	 *
 	 * @param string $sUser
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return Usuario
 	 *
+	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function findByUsername(string $sUser): Usuario {
 		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_login = ?';

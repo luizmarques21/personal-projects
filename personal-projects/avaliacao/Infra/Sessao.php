@@ -2,7 +2,7 @@
 
 /**
  * Class Sessao
- * @version 1.0.0
+ * @version 1.1.0
  */
 class Sessao {
 	
@@ -32,6 +32,7 @@ class Sessao {
 	 *
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Metodo renomeado
 	 */
 	public function registraUsuarioLogado(string $sNome): void {
 		$_SESSION['logado'] = $sNome;
@@ -44,6 +45,7 @@ class Sessao {
 	 * @return string
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Metodo renomeado
 	 */
 	public function getUsuarioLogado(): string {
 		return $_SESSION['logado'];
@@ -56,6 +58,7 @@ class Sessao {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removido redirecionamento de pagina
 	 */
 	public function deslogaUsuario(): void {
 		unset($_SESSION['logado']);
@@ -68,8 +71,9 @@ class Sessao {
 	 * @return bool
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Metodo renomeado
 	 */
-	public function getUsuarioAtivo(): bool {
+	public function hasUsuarioAtivo(): bool {
 		return (strlen($_SESSION['logado']) > 0);
 	}
 	
@@ -80,6 +84,7 @@ class Sessao {
 	 * @return string
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o tipo do metodo
 	 */
 	public static function getMensagem(): string {
 		return $_SESSION['mensagem'];
@@ -93,8 +98,10 @@ class Sessao {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o tipo do metodo
 	 */
 	public static function setMensagem(string $sMensagem): void {
 		$_SESSION['mensagem'] = $sMensagem;
 	}
+
 }

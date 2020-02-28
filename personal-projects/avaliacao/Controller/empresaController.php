@@ -11,11 +11,13 @@ class empresaController {
 	
 	/**
 	 * empresaController constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
 	 */
 	public function __construct() {
-		$this->oSessao = new Sessao();
-		$this->oView = new View();
+		$this->oSessao = DependencyContainer::getSessao();
+		$this->oView = DependencyContainer::getView();
+		DependencyContainer::checaUsuarioAtivo();
 	}
 	
 	/**
@@ -25,18 +27,15 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho e
+	 * alterada a verificação de usuario ativo
 	 */
 	public function index(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			$aEmpresas = (new empresaDAO())->findAll();
-			$this->oView->setTitulo('Empresas');
-			$this->oView->adicionaVariavel('aEmpresas', $aEmpresas);
-			$this->chamaCabecalho();
-			$this->oView->exibeTemplate('empresas/listarEmpresas.php');
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$aEmpresas = (new empresaDAO())->findAll();
+		$this->oView->setTitulo('Empresas');
+		$this->oView->adicionaVariavel('aEmpresas', $aEmpresas);
+		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+		$this->oView->exibeTemplate('empresas/listarEmpresas.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -46,16 +45,11 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho
 	 */
 	public function cadastrar(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			$this->oView->setTitulo('Criar nova empresa');
-			$this->chamaCabecalho();
-			$this->oView->exibeTemplate('empresas/inserirEmpresa.php');
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$this->oView->setTitulo('Criar nova empresa');
+		$this->oView->exibeTemplate('empresas/inserirEmpresa.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -65,18 +59,14 @@ class empresaController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida verificação de usuario ativo
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function excluir(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
-			$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
-			$oEmpresa->deleteEmpresa();
-			$this->oSessao->setMensagem('Empresa excluida com sucesso');
-			header("Location: " . WEBROOT . "empresa/");
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
+		$oEmpresa->deleteEmpresa();
+		$this->oSessao->setMensagem('Empresa excluida com sucesso');
+		header("Location: " . WEBROOT . "empresa/");
 	}
 	
 	/**
@@ -89,12 +79,13 @@ class empresaController {
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
+		if ($this->oSessao->hasUsuarioAtivo()) {
 			$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
 			$this->oView->setTitulo('Editar empresa');
 			$this->oView->adicionaVariavel('oEmpresa', $oEmpresa);
-			$this->chamaCabecalho();
-			$this->oView->exibeTemplate('empresas/editarEmpresa.php');
+			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+			//$this->chamaCabecalho();
+			$this->oView->exibeTemplate('empresas/editarEmpresa.php', 'cabecalho.php');
 		} else {
 			$this->oSessao->setMensagem('Usuario precisa estar logado');
 			header("Location: " . WEBROOT . "login/");
@@ -129,11 +120,6 @@ class empresaController {
 		$oEmpresa->replaceEmpresa($_POST['id']);
 		$this->oSessao->setMensagem('Empresa atualizada com sucesso');
 		header("Location: ../../empresa/");
-	}
-	
-	private function chamaCabecalho() {
-		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-		$this->oView->exibeCabecalho('cabecalho.php');
 	}
 	
 }

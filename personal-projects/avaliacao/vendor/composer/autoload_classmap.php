@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Autenticador' => $baseDir . '/Model/Autenticador.php',
     'Cargo' => $baseDir . '/Model/Cargo.php',
+    'DependencyContainer' => $baseDir . '/Infra/DependencyContainer.php',
     'Empresa' => $baseDir . '/Model/Empresa.php',
     'Filiado' => $baseDir . '/Model/Filiado.php',
     'JSONConfig' => $baseDir . '/Infra/JSONConfig.php',

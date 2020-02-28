@@ -6,19 +6,23 @@
  */
 class View {
 	
-	private $aDados;
+	private $aDados = [];
 	
 	/**
 	 * Exibe o template da pagina
 	 *
 	 * @param string $sTemplate
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @param string $sCabecalho
 	 * @return void
 	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Adicionado parametro e metodo para adicionar o cabeçalho
 	 */
-	public function exibeTemplate(string $sTemplate): void {
+	public function exibeTemplate(string $sTemplate, string $sCabecalho = null): void {
 		extract($this->aDados);
+		if (!empty($sCabecalho))
+			$this->exibeCabecalho($sCabecalho);
 		include_once 'View/' . $sTemplate;
 		include_once 'View/rodape.php';
 	}

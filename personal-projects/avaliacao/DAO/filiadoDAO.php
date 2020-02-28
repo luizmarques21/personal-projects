@@ -6,7 +6,7 @@ class filiadoDAO {
 	private $oDBHandler;
 	
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler(JSONConfig::getInstance());
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	public function findAll() {

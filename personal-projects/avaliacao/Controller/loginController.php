@@ -12,10 +12,11 @@ class loginController {
 	/**
 	 * loginController constructor.
 	 * @since 1.0.0
+	 * implementado o uso do DC
 	 */
 	public function __construct() {
-		$this->oSessao = new Sessao();
-		$this->oView = new View();
+		$this->oSessao = DependencyContainer::getSessao();
+		$this->oView = DependencyContainer::getView();
 	}
 	
 	/**
@@ -38,13 +39,14 @@ class loginController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * removida chamada a metodo para exibir cabeçalho
 	 */
 	public function home(): void {
+		DependencyContainer::checaUsuarioAtivo();
 		$this->oView->setTitulo('Sindicato dos Trainees - Home');
 		$sLogado = $this->oSessao->getUsuarioLogado();
 		$this->oView->adicionaVariavel('sLogado', $sLogado);
-		$this->oView->exibeCabecalho('cabecalho.php');
-		$this->oView->exibeTemplate('home.php');
+		$this->oView->exibeTemplate('home.php', 'cabecalho.php');
 	}
 	
 	/**

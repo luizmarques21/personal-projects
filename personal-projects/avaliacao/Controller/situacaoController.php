@@ -12,10 +12,11 @@ class situacaoController {
 	/**
 	 * situacaoController constructor.
 	 * @since 1.0.0
+	 * implementação do DC
 	 */
 	public function __construct() {
-		$this->oSessao = new Sessao();
-		$this->oView = new View();
+		$this->oSessao = DependencyContainer::getSessao(); //new Sessao();
+		$this->oView = DependencyContainer::getView(); //new View();
 	}
 	
 	/**
@@ -25,14 +26,16 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * remoção do metodo chamaCabecalho
 	 */
 	public function index(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
+		if ($this->oSessao->hasUsuarioAtivo()) {
 			$aSituacoes = (new situacaoDAO())->findAll();
 			$this->oView->setTitulo('Situações');
 			$this->oView->adicionaVariavel('aSituacoes', $aSituacoes);
-			$this->chamaCabecalho();
-			$this->oView->exibeTemplate('situacoes/listarSituacoes.php');
+			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+			//$this->chamaCabecalho();
+			$this->oView->exibeTemplate('situacoes/listarSituacoes.php', 'cabecalho.php');
 		} else {
 			$this->oSessao->setMensagem('Usuario precisa estar logado');
 			header("Location: " . WEBROOT . "login/");
@@ -46,12 +49,14 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * remocao do metodo chamaCabecalho
 	 */
 	public function cadastrar(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
+		if ($this->oSessao->hasUsuarioAtivo()) {
 			$this->oView->setTitulo('Criar nova Situação');
-			$this->chamaCabecalho();
-			$this->oView->exibeTemplate('situacoes/inserirSituacao.php');
+			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+			//$this->chamaCabecalho();
+			$this->oView->exibeTemplate('situacoes/inserirSituacao.php', 'cabecalho.php');
 		} else {
 			$this->oSessao->setMensagem('Usuario precisa estar logado');
 			header("Location: " . WEBROOT . "login/");
@@ -67,7 +72,7 @@ class situacaoController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function excluir(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
+		if ($this->oSessao->hasUsuarioAtivo()) {
 			$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
 			$oSituacao->deleteSituacao();
 			$this->oSessao->setMensagem('Situacao excluida com sucesso');
@@ -85,14 +90,16 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * remoção do metodo chamaCabecalho
 	 */
 	public function editar(): void {
-		if ($this->oSessao->getUsuarioAtivo()) {
+		if ($this->oSessao->hasUsuarioAtivo()) {
 			$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
 			$this->oView->setTitulo('Editar Situacao');
 			$this->oView->adicionaVariavel('oSituacao', $oSituacao);
-			$this->chamaCabecalho();
-			$this->oView->exibeTemplate('situacoes/editarSituacao.php');
+			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
+			//$this->chamaCabecalho();
+			$this->oView->exibeTemplate('situacoes/editarSituacao.php', 'cabecalho.php');
 		} else {
 			$this->oSessao->setMensagem('Usuario precisa estar logado');
 			header("Location: " . WEBROOT . "login/");
@@ -106,6 +113,7 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * alterado parametro do header
 	 */
 	public function postCadastra(): void {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
@@ -121,6 +129,7 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * alterado parametro do header
 	 */
 	public function postEdita(): void {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
@@ -129,9 +138,9 @@ class situacaoController {
 		header("Location: " . WEBROOT . "situacao/");
 	}
 	
-	private function chamaCabecalho() {
+	/*private function chamaCabecalho() {
 		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
 		$this->oView->exibeCabecalho('cabecalho.php');
-	}
+	}*/
 	
 }

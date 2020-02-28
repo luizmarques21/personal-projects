@@ -2,7 +2,7 @@
 
 /**
  * Class empresaDAO
- * @version 1.0.0
+ * @version 1.1.0
  */
 class empresaDAO {
 	
@@ -10,10 +10,11 @@ class empresaDAO {
 	
 	/**
 	 * empresaDAO constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler(JSONConfig::getInstance());
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	/**
