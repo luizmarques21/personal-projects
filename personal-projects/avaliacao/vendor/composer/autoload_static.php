@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3578481ad67fa219245f95517f97c611
+class ComposerStaticInita6471fb27a135e8dd95bcfc5e2ad62cd
 {
     public static $classMap = array (
         'Autenticador' => __DIR__ . '/../..' . '/Model/Autenticador.php',
@@ -34,7 +34,7 @@ class ComposerStaticInit3578481ad67fa219245f95517f97c611
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit3578481ad67fa219245f95517f97c611::$classMap;
+            $loader->classMap = ComposerStaticInita6471fb27a135e8dd95bcfc5e2ad62cd::$classMap;
 
         }, null, ClassLoader::class);
     }

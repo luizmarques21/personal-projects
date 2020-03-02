@@ -2,7 +2,7 @@
 
 /**
  * Class situacaoController
- * @version 1.0.0
+ * @version 1.1.0
  */
 class situacaoController {
 	
@@ -11,12 +11,13 @@ class situacaoController {
 	
 	/**
 	 * situacaoController constructor.
-	 * @since 1.0.0
-	 * implementação do DC
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do DC
 	 */
 	public function __construct() {
-		$this->oSessao = DependencyContainer::getSessao(); //new Sessao();
-		$this->oView = DependencyContainer::getView(); //new View();
+		$this->oSessao = DependencyContainer::getSessao();
+		$this->oView = DependencyContainer::getView();
+		DependencyContainer::checaUsuarioAtivo();
 	}
 	
 	/**
@@ -26,20 +27,13 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
-	 * remoção do metodo chamaCabecalho
+	 * @since 1.1.0 - Remoção do metodo chamaCabecalho
 	 */
 	public function index(): void {
-		if ($this->oSessao->hasUsuarioAtivo()) {
-			$aSituacoes = (new situacaoDAO())->findAll();
-			$this->oView->setTitulo('Situações');
-			$this->oView->adicionaVariavel('aSituacoes', $aSituacoes);
-			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-			//$this->chamaCabecalho();
-			$this->oView->exibeTemplate('situacoes/listarSituacoes.php', 'cabecalho.php');
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$aSituacoes = (new situacaoDAO())->findAll();
+		$this->oView->setTitulo('Situações');
+		$this->oView->adicionaVariavel('aSituacoes', $aSituacoes);
+		$this->oView->exibeTemplate('situacoes/listarSituacoes.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -49,18 +43,11 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
-	 * remocao do metodo chamaCabecalho
+	 * @since 1.1.0 - Remocao do metodo chamaCabecalho
 	 */
 	public function cadastrar(): void {
-		if ($this->oSessao->hasUsuarioAtivo()) {
-			$this->oView->setTitulo('Criar nova Situação');
-			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-			//$this->chamaCabecalho();
-			$this->oView->exibeTemplate('situacoes/inserirSituacao.php', 'cabecalho.php');
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$this->oView->setTitulo('Criar nova Situação');
+		$this->oView->exibeTemplate('situacoes/inserirSituacao.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -70,17 +57,13 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Remoção de verificação de usuario ativo
 	 */
 	public function excluir(): void {
-		if ($this->oSessao->hasUsuarioAtivo()) {
-			$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
-			$oSituacao->deleteSituacao();
-			$this->oSessao->setMensagem('Situacao excluida com sucesso');
-			header("Location: " . WEBROOT . "situacao/");
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
+		$oSituacao->deleteSituacao();
+		$this->oSessao->setMensagem('Situacao excluida com sucesso');
+		header("Location: " . WEBROOT . "situacao/");
 	}
 	
 	/**
@@ -90,20 +73,13 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
-	 * remoção do metodo chamaCabecalho
+	 * @since 1.1.0 - Remoção do metodo chamaCabecalho
 	 */
 	public function editar(): void {
-		if ($this->oSessao->hasUsuarioAtivo()) {
-			$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
-			$this->oView->setTitulo('Editar Situacao');
-			$this->oView->adicionaVariavel('oSituacao', $oSituacao);
-			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-			//$this->chamaCabecalho();
-			$this->oView->exibeTemplate('situacoes/editarSituacao.php', 'cabecalho.php');
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
+		$this->oView->setTitulo('Editar Situacao');
+		$this->oView->adicionaVariavel('oSituacao', $oSituacao);
+		$this->oView->exibeTemplate('situacoes/editarSituacao.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -113,7 +89,7 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
-	 * alterado parametro do header
+	 * @since 1.1.0 - Alterado parametro do header
 	 */
 	public function postCadastra(): void {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
@@ -129,7 +105,7 @@ class situacaoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
-	 * alterado parametro do header
+	 * @since 1.1.0 - Alterado parametro do header
 	 */
 	public function postEdita(): void {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
@@ -137,10 +113,5 @@ class situacaoController {
 		$this->oSessao->setMensagem('Situação atualizada com sucesso');
 		header("Location: " . WEBROOT . "situacao/");
 	}
-	
-	/*private function chamaCabecalho() {
-		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-		$this->oView->exibeCabecalho('cabecalho.php');
-	}*/
 	
 }

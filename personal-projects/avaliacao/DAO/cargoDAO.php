@@ -2,7 +2,7 @@
 
 /**
  * Class cargoDAO
- * @version 1.0.0
+ * @version 1.1.0
  */
 class cargoDAO {
 	
@@ -10,11 +10,11 @@ class cargoDAO {
 	
 	/**
 	 * cargoDAO constructor.
-	 * @since 1.0.0
-	 * implementado DC
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = DependencyContainer::getDBHandler(); //new MoobiDataBaseHandler(JSONConfig::getInstance());
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	/**

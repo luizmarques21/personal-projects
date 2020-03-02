@@ -62,7 +62,7 @@
 	</div>
 </div>
 
-<div id="meumodal" class="modal fade" role="dialog" data->
+<div id="meumodal" class="modal fade" role="dialog">
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title">Título do modal</h4>
@@ -70,9 +70,7 @@
         </div>
         <div class="modal-body">
             <?php
-                //include_once ROOT . 'View/dependentes/listarDependenteModal.php'
-                //(new View())->exibeTemplate('dependentes/listarDependenteModal')
-                (new cargoController())->index();
+                include_once ROOT . 'View/dependentes/listarDependenteModal.php'
             ?>
         </div>
         

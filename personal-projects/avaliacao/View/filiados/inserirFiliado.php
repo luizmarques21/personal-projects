@@ -1,0 +1,62 @@
+<form action="../postcadastra/" method="post">
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<div class="form-group">
+				<label for="nome_filiado">Nome</label>
+				<input name="nome_filiado" type="text" class="form-control"><br>
+				<label for="cpf_filiado">CPF</label>
+				<input name="cpf_filiado" type="text" class="form-control"><br>
+				<label for="rg_filiado">RG</label>
+				<input name="rg_filiado" type="text" class="form-control"><br>
+				<label for="data_nascimento_filiado">Data de Nascimento</label>
+				<input name="data_nascimento_filiado" type="date" class="form-control"><br>
+				<label for="empresa_filiado">Empresa</label>
+				<select name="empresa_filiado" class="form-control">
+					<?php
+						$aEmpresas = (new empresaDAO())->findAll();
+						foreach ($aEmpresas as $aEmpresa) {
+							$oEmpresa = Empresa::createFromArray($aEmpresa);
+							echo "<option value=\"{$oEmpresa->getID()}\">{$oEmpresa->getNome()}</option>";
+						}
+					?>
+				</select><br>
+				<label for="cargo_filiado">Cargo</label>
+				<select name="cargo_filiado" class="form-control">
+					<?php
+						$aCargos = (new cargoDAO())->findAll();
+						foreach ($aCargos as $aCargo) {
+							$oCargo = Cargo::createFromArray($aCargo);
+							echo "<option value\"{$oCargo->getID()}\">{$oCargo->getNome()}</option>";
+						}
+					?>
+				</select><br>
+				<label for="situacao_filiado">Situação</label>
+				<select name="situacao_filiado" class="form-control">
+					<?php
+						$aSituacoes = (new situacaoDAO())->findAll();
+						foreach ($aSituacoes as $aSituacao) {
+							$oSituacao = Situacao::createFromArray($aSituacao);
+							echo "<option value\"{$oSituacao->getID()}\">{$oSituacao->getNome()}</option>";
+						}
+					?>
+				</select><br>
+				<label for="telefone_filiado">Telefone Residencial</label>
+				<input name="telefone_filiado" type="text" class="form-control"><br>
+				<label for="celular_filiado">Telefone Celular</label>
+				<input name="celular_filiado" type="text" class="form-control"><br>
+			</div>
+			<input type="submit" class="btn btn-success btn-block" value="Salvar">
+		</div>
+		<div class="col-md-6 col-md-offset-3">
+			<a href="#" name="adiciona-dependente">Adicionar dependente</a>
+			<div class="form-group" name="form-dependente">
+				<label for="nome_dependente">Nome</label>
+				<input name="nome_dependente" type="text" class="form-control"><br>
+				<label for="data_nascimento_dependente">Data de Nascimento</label>
+				<input name="data_nascimento_dependente" type="date" class="form-control"><br>
+				<label for="parentesco_dependente">Grau de parentesco</label>
+				<input name="parentesco_dependente" type="text" class="form-control"><br>
+			</div>
+		</div>
+	</div>
+</form>

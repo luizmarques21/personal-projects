@@ -18,4 +18,9 @@ class filiadoController {
 		$this->oView->exibeTemplate('filiados/listarFiliados.php', 'cabecalho.php');
 	}
 	
+	public function cadastrar(): void {
+		$this->oView->setTitulo('Cadastrar novo filiado');
+		$this->oView->exibeTemplate('filiados/inserirFiliado.php', 'cabecalho.php');
+	}
+	
 }

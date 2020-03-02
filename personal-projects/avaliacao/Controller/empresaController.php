@@ -2,7 +2,7 @@
 
 /**
  * Class empresaController
- * @version 1.0.0
+ * @version 1.1.0
  */
 class empresaController {
 	
@@ -76,20 +76,14 @@ class empresaController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabeçalho
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		if ($this->oSessao->hasUsuarioAtivo()) {
-			$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
-			$this->oView->setTitulo('Editar empresa');
-			$this->oView->adicionaVariavel('oEmpresa', $oEmpresa);
-			$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
-			//$this->chamaCabecalho();
-			$this->oView->exibeTemplate('empresas/editarEmpresa.php', 'cabecalho.php');
-		} else {
-			$this->oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
-		}
+		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
+		$this->oView->setTitulo('Editar empresa');
+		$this->oView->adicionaVariavel('oEmpresa', $oEmpresa);
+		$this->oView->exibeTemplate('empresas/editarEmpresa.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -99,6 +93,7 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o parametro do header
 	 */
 	public function postCadastra() {
 		$oEmpresa = new Empresa($_POST['nome_empresa']);
@@ -114,12 +109,13 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o parametro do header
 	 */
 	public function postEdita() {
 		$oEmpresa = new Empresa($_POST['nome_empresa']);
 		$oEmpresa->replaceEmpresa($_POST['id']);
 		$this->oSessao->setMensagem('Empresa atualizada com sucesso');
-		header("Location: ../../empresa/");
+		header("Location: ". WEBROOT . "empresa/");
 	}
 	
 }

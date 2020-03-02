@@ -2,7 +2,7 @@
 
 /**
  * Class loginController
- * @version 1.0.0
+ * @version 1.1.0
  */
 class loginController {
 	
@@ -11,8 +11,8 @@ class loginController {
 	
 	/**
 	 * loginController constructor.
-	 * @since 1.0.0
-	 * implementado o uso do DC
+	 * @since 1.0.0 - Definição de versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
 	 */
 	public function __construct() {
 		$this->oSessao = DependencyContainer::getSessao();
@@ -39,7 +39,8 @@ class loginController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
-	 * removida chamada a metodo para exibir cabeçalho
+	 * @since 1.1.0 - Removida chamada a metodo para exibir cabeçalho
+	 * e adicionada verificação de usuario ativo
 	 */
 	public function home(): void {
 		DependencyContainer::checaUsuarioAtivo();
