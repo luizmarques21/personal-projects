@@ -73,7 +73,7 @@ class usuarioController {
 		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
 		$oUsuario->deleteUsuario();
 		$this->oSessao->setMensagem('Usuario excluido com sucesso');
-		header("Location: " . WEBROOT . "usuario/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
 	}
 	
 	/**
@@ -121,7 +121,7 @@ class usuarioController {
 		$oUsuario = new Usuario($_POST['login'], $_POST['senha'], $_POST['tipo_usuario']);
 		$oUsuario->saveUsuario();
 		$this->oSessao->setMensagem('Usuario cadastrado com sucesso!');
-		header("Location: " . WEBROOT . "usuario/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
 	}
 	
 	/**
@@ -136,7 +136,7 @@ class usuarioController {
 		$oUsuario = new Usuario($_POST['login'], $_POST['senha'], $_POST['tipo_usuario']);
 		$oUsuario->replaceUsuario($_POST['id']);
 		$this->oSessao->setMensagem('Usuario atualizado com sucesso!');
-		header("Location: " . WEBROOT . "usuario/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
 	}
 	
 }

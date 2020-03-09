@@ -2,7 +2,7 @@
 
 /**
  * Class MoobiDataBaseHandler
- * @version 1.1.0
+ * @version 1.1.1
  */
 class MoobiDataBaseHandler {
 	
@@ -89,10 +89,13 @@ class MoobiDataBaseHandler {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Adcionada chamada ao metodo bindParametros
+	 * @since 1.1.1 - Adicionado tipo null no segundo parametro
+	 * e verificação se o parametro esta vazio
 	 */
-	public function queryOne(string $sSQL, array $aParams) {
+	public function queryOne(string $sSQL, array $aParams = null) {
 		$mSTMT = $this->rConexao->prepare($sSQL);
-		$mSTMT = $this->bindParametros($mSTMT, $aParams);
+		if ($aParams)
+			$mSTMT = $this->bindParametros($mSTMT, $aParams);
 		$mSTMT->execute();
 		return $mSTMT->fetch();
 	}

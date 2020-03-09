@@ -63,7 +63,7 @@ class situacaoController {
 		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
 		$oSituacao->deleteSituacao();
 		$this->oSessao->setMensagem('Situacao excluida com sucesso');
-		header("Location: " . WEBROOT . "situacao/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "situacao/");
 	}
 	
 	/**
@@ -95,7 +95,7 @@ class situacaoController {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
 		$oSituacao->saveSituacao();
 		$this->oSessao->setMensagem('Situacao cadastrada com sucesso');
-		header("Location: " . WEBROOT . "situacao/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "situacao/");
 	}
 	
 	/**
@@ -111,7 +111,7 @@ class situacaoController {
 		$oSituacao = new Situacao($_POST['nome_situacao']);
 		$oSituacao->replaceSituacao($_POST['id']);
 		$this->oSessao->setMensagem('Situação atualizada com sucesso');
-		header("Location: " . WEBROOT . "situacao/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "situacao/");
 	}
 	
 }

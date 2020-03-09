@@ -21,7 +21,7 @@
             ?>
         </div>
     <?php endif; ?>
-    <form action="<?php echo WEBROOT ?>login/validalogin" method="post">
+    <form action="<?php echo CAMINHO_PADRAO_WEB ?>login/validalogin" method="post">
         <div class="form-group">
             <label for="usuario">Login</label>
             <input type="text" name="usuario" id="usuario" class="form-control">

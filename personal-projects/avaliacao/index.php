@@ -1,21 +1,21 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-
-define('ROOT', '/var/www/html/trainee.luiz/avaliacao/');
-define('WEBROOT', 'http://localhost/trainee.luiz/avaliacao/');
-
-$oSessao = DependencyContainer::getSessao();
-$oSessao->iniciaSessao();
+include_once __DIR__ . '/Infra/Config.php';
 
 if (!empty($_REQUEST)) {
 	$sClassName = $_REQUEST['controller'] . 'Controller';
 	$sAction = $_REQUEST['action'];
 	$iID = $_REQUEST['id'];
-	$oObject = new $sClassName;
+	$oObject = new $sClassName($oGlobais);
 	if ($sAction === '')
 		$oObject->index();
 	else
 		$oObject->$sAction($iID);
-} else
-	header("Location: login/");
+} else {
+	if ($oSessao->hasUsuarioAtivo()) {
+		header("Location: " . CAMINHO_PADRAO_WEB . "login/home");
+	} else {
+		header("Location: login/");
+	}
+}
+

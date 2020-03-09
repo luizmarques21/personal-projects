@@ -2,21 +2,25 @@
 
 /**
  * Class loginController
- * @version 1.1.0
+ * @version 1.2.0
  */
 class loginController {
 	
 	private $oSessao;
 	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * loginController constructor.
+	 * @param Globals $oGlobais
 	 * @since 1.0.0 - Definição de versionamento da classe
 	 * @since 1.1.0 - Implementado o uso do DC
+	 * @since 1.2.0 - Implementado o uso da classe Globals
 	 */
-	public function __construct() {
+	public function __construct(Globals $oGlobais) {
 		$this->oSessao = DependencyContainer::getSessao();
 		$this->oView = DependencyContainer::getView();
+		$this->oGlobais = $oGlobais;
 	}
 	
 	/**
@@ -57,10 +61,14 @@ class loginController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.2.0 - Implementação da classe Globals
 	 */
 	public function validaLogin(): void {
 		try{
-			$oAutenticador = new Autenticador($_POST['usuario'], $_POST['senha']);
+			$oAutenticador = new Autenticador(
+				$this->oGlobais->post('usuario'),
+				$this->oGlobais->post('senha')
+			);
 			$oUsuario = (new usuarioDAO())->findByUsername($oAutenticador->getUsuario());
 			if (!$oAutenticador->validaSenha($oUsuario->getSenha()))
 				throw new Exception('Senha invalida');

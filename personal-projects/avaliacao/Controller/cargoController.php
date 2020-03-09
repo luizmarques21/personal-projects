@@ -8,15 +8,18 @@ class cargoController {
 	
 	private $oSessao;
 	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * cargoController constructor.
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Implementacao do DC
+	 * @since 1.2.0 - Implementação da classe Globals
 	 */
-	public function __construct() {
+	public function __construct(Globals $oGlobais) {
 		$this->oSessao = DependencyContainer::getSessao();
 		$this->oView = DependencyContainer::getView();
+		$this->oGlobais = $oGlobais;
 		DependencyContainer::checaUsuarioAtivo();
 	}
 	
@@ -60,10 +63,11 @@ class cargoController {
 	 * @since 1.1.0 - Remoção de verificação de usuario ativo
 	 */
 	public function excluir(): void {
-		$oCargo = (new cargoDAO())->findByID($_GET['id']);
+		$iCargoID = $this->oGlobais->get('id');
+		$oCargo = (new cargoDAO())->findByID($iCargoID);
 		$oCargo->deleteCargo();
 		$this->oSessao->setMensagem('Cargo excluido com sucesso');
-		header("Location: " . WEBROOT . "cargo/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "cargo/");
 	}
 	
 	/**
@@ -74,9 +78,11 @@ class cargoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho
+	 * @since 1.2.0 - Implementação da classe Globals
 	 */
 	public function editar(): void {
-		$oCargo = (new cargoDAO())->findByID($_GET['id']);
+		$iCargoID = $this->oGlobais->get('id');
+		$oCargo = (new cargoDAO())->findByID($iCargoID);
 		$this->oView->setTitulo('Editar cargo');
 		$this->oView->adicionaVariavel('oCargo', $oCargo);
 		$this->oView->exibeTemplate('cargos/editarCargo.php', 'cabecalho.php');
@@ -90,12 +96,13 @@ class cargoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Alterado o parametro do header
+	 * @since 1.2.0 - Implementação da classe Globals
 	 */
 	public function postCadastra(): void {
-		$oCargo = new Cargo($_POST['nome_cargo']);
+		$oCargo = new Cargo($this->oGlobais->post('nome_cargo'));
 		$oCargo->saveCargo();
 		$this->oSessao->setMensagem('Cargo cadastrado com sucesso');
-		header("Location: " . WEBROOT . "cargo/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "cargo/");
 	}
 	
 	/**
@@ -106,12 +113,13 @@ class cargoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Alterado o parametro do header
+	 * @since 1.2.0 - Implementação da classe Globals
 	 */
 	public function postEdita(): void {
-		$oCargo = new Cargo($_POST['nome_cargo']);
-		$oCargo->replaceCargo($_POST['id']);
+		$oCargo = new Cargo($this->oGlobais->post('nome_cargo'));
+		$oCargo->replaceCargo($this->oGlobais->post('id'));
 		$this->oSessao->setMensagem('Cargo atualizado com sucesso');
-		header("Location: " . WEBROOT . "cargo/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "cargo/");
 	}
 	
 }

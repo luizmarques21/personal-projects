@@ -1,18 +1,21 @@
 CREATE TABLE ems_empresa (
 	ems_id INT NOT NULL AUTO_INCREMENT,
 	ems_nome VARCHAR(255),
+	ems_data_remocao DATETIME,
 	PRIMARY KEY(ems_id)
 );
 
 CREATE TABLE cro_cargo (
 	cro_id INT NOT NULL AUTO_INCREMENT,
 	cro_nome VARCHAR(255),
+	cro_data_remocao DATETIME,
 	PRIMARY KEY(cro_id)
 );
 
 CREATE TABLE sto_situacao (
 	sto_id INT NOT NULL AUTO_INCREMENT,
 	sto_nome VARCHAR(255),
+	sto_data_remocao DATETIME,
 	PRIMARY KEY(sto_id)
 );
 
@@ -21,6 +24,7 @@ CREATE TABLE usi_usuario (
 	usi_login VARCHAR(100),
 	usi_senha VARCHAR(60),
 	usi_tipo_usuario CHAR(1),
+	usi_data_remocao DATETIME,
 	PRIMARY KEY(usi_id)
 );
 
@@ -33,9 +37,10 @@ CREATE TABLE flo_filiado (
 	ems_id INT,
 	cro_id INT,
 	sto_id INT,
-	flo_data_atualizacao DATE,
+	flo_data_atualizacao DATETIME,
 	flo_residencial VARCHAR(9),
 	flo_celular VARCHAR(10),
+	flo_data_remocao DATETIME,
 	PRIMARY KEY(flo_id)
 );
 
@@ -45,6 +50,7 @@ CREATE TABLE dpe_dependente (
 	dpe_data_nascimento DATE,
 	dpe_grau_parentesco VARCHAR(60),
 	flo_id INT,
+	dpe_data_remocao DATETIME,
 	PRIMARY KEY(dpe_id)
 );
 

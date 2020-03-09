@@ -20,7 +20,7 @@ class DependencyContainer {
 	 */
 	public static function getDBHandler(): MoobiDataBaseHandler {
 		if (!isset(self::$oDBHandler)) {
-			JSONConfig::setConfigFile(ROOT . 'Infra/.config.json');
+			JSONConfig::setConfigFile(CAMINHO_PADRAO . 'Infra/.config.json');
 			self::$oDBHandler = new MoobiDataBaseHandler(JSONConfig::getInstance());
 		}
 		return self::$oDBHandler;
@@ -68,7 +68,7 @@ class DependencyContainer {
 	public static function checaUsuarioAtivo(): void {
 		if (!self::$oSessao->hasUsuarioAtivo()) {
 			self::$oSessao->setMensagem('Usuario precisa estar logado');
-			header("Location: " . WEBROOT . "login/");
+			header("Location: " . CAMINHO_PADRAO_WEB . "login/");
 			exit();
 		}
 	}
@@ -87,7 +87,7 @@ class DependencyContainer {
 		$sLogado = self::$oSessao->getUsuarioLogado();
 		if (!Usuario::isADM($sLogado)) {
 			self::$oSessao->setMensagem('Usuario precisa ter privilegio adminstrativo');
-			header("Location: " . WEBROOT . "login/home");
+			header("Location: " . CAMINHO_PADRAO_WEB . "login/home");
 			exit();
 		}
 	}

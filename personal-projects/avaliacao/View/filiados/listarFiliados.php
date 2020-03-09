@@ -1,7 +1,31 @@
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-2">
 		<a href="cadastrar/" class="btn btn-info btn-block">Criar Novo Filiado</a>
 	</div>
+    <div class="col-sm-6 ml-auto input-group">
+        <span class="input-group-text">Buscar por:</span>
+        <select class="form-control" id="filtro-busca">
+            <option value="nome">Nome</option>
+            <option value="mes">Mês de Nascimento</option>
+        </select>
+        <input type="text" class="form-control" id="valor-busca-nome">
+        <select class="form-control" id="valor-busca-mes">
+            <option value="01">Janeiro</option>
+            <option value="02">Fevereiro</option>
+            <option value="03">Março</option>
+            <option value="04">Abril</option>
+            <option value="05">Maio</option>
+            <option value="06">Junho</option>
+            <option value="07">Julho</option>
+            <option value="08">Agosto</option>
+            <option value="09">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+        </select>
+        <button type="button" class="btn btn-light" id="btn-busca">Buscar</button>
+        <a href="" class="btn btn-light">Limpar</a>
+    </div>
 </div>
 
 <div class="row">
@@ -26,7 +50,7 @@
                     <th></th>
 				</tr>
 				</thead>
-				<tbody>
+				<tbody id="table-resultado">
 				<?php foreach ($aFiliados as $aFiliado): ?>
 					<?php $oFiliado = Filiado::createFromArray($aFiliado) ?>
 					<tr>
@@ -42,7 +66,8 @@
                         <td><?php echo $oFiliado->getTelCelular(); ?></td>
                         <td><?php echo $oFiliado->getDataAtualizacao(); ?></td>
                         <td align="right">
-                            <button type="button" class="btn btn-info btn-group-sm" data-toggle="modal" data-target="#meumodal">
+                            <button type="button" class="btn btn-info btn-group-sm btn-dependente" data-toggle="modal"
+                                    data-target="#meumodal" data-id="<?php echo $oFiliado->getID(); ?>">
                                 Dependentes
                             </button>
                         </td>
@@ -57,27 +82,29 @@
 				</tbody>
 			</table>
 		<?php else: ?>
-			<p>Nenhuma empresa cadastrada</p>
+			<p>Nenhum filiado cadastrado</p>
 		<?php endif; ?>
 	</div>
 </div>
 
-<div id="meumodal" class="modal fade" role="dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Título do modal</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-            <?php
-                include_once ROOT . 'View/dependentes/listarDependenteModal.php'
-            ?>
-        </div>
-        
-        <!-- Rodapé do modal-->
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
-            <button type="button" class="btn btn-primary">Salvar Alterações</button>
+<div id="meumodal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Dependentes</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="box-conteudo-modal"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
         </div>
     </div>
 </div>
+
+<script src="<?php echo CAMINHO_PADRAO_WEB; ?>js/listar-filiado.js"></script>
+<script src="<?php echo CAMINHO_PADRAO_WEB; ?>js/busca-filiado.js"></script>

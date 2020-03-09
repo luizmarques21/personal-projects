@@ -66,7 +66,7 @@ class empresaController {
 		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
 		$oEmpresa->deleteEmpresa();
 		$this->oSessao->setMensagem('Empresa excluida com sucesso');
-		header("Location: " . WEBROOT . "empresa/");
+		header("Location: " . CAMINHO_PADRAO_WEB . "empresa/");
 	}
 	
 	/**
@@ -99,7 +99,7 @@ class empresaController {
 		$oEmpresa = new Empresa($_POST['nome_empresa']);
 		$oEmpresa->saveEmpresa();
 		$this->oSessao->setMensagem('Empresa cadastrada com sucesso');
-		header("Location: ". WEBROOT . "empresa/");
+		header("Location: ". CAMINHO_PADRAO_WEB . "empresa/");
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class empresaController {
 		$oEmpresa = new Empresa($_POST['nome_empresa']);
 		$oEmpresa->replaceEmpresa($_POST['id']);
 		$this->oSessao->setMensagem('Empresa atualizada com sucesso');
-		header("Location: ". WEBROOT . "empresa/");
+		header("Location: ". CAMINHO_PADRAO_WEB . "empresa/");
 	}
 	
 }

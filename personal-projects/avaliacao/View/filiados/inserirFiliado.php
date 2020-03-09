@@ -26,7 +26,7 @@
 						$aCargos = (new cargoDAO())->findAll();
 						foreach ($aCargos as $aCargo) {
 							$oCargo = Cargo::createFromArray($aCargo);
-							echo "<option value\"{$oCargo->getID()}\">{$oCargo->getNome()}</option>";
+							echo "<option value=\"{$oCargo->getID()}\">{$oCargo->getNome()}</option>";
 						}
 					?>
 				</select><br>
@@ -36,7 +36,7 @@
 						$aSituacoes = (new situacaoDAO())->findAll();
 						foreach ($aSituacoes as $aSituacao) {
 							$oSituacao = Situacao::createFromArray($aSituacao);
-							echo "<option value\"{$oSituacao->getID()}\">{$oSituacao->getNome()}</option>";
+							echo "<option value=\"{$oSituacao->getID()}\">{$oSituacao->getNome()}</option>";
 						}
 					?>
 				</select><br>
@@ -44,19 +44,28 @@
 				<input name="telefone_filiado" type="text" class="form-control"><br>
 				<label for="celular_filiado">Telefone Celular</label>
 				<input name="celular_filiado" type="text" class="form-control"><br>
+                <label for="lista-dependentes" type="text">Dependentes</label>
+                <select id="lista-dependentes" class="form-control"></select>
+                <button type="button" class="btn btn-light btn-link" id="adiciona-dependente">Adicionar</button>
+                <button type="button" class="btn btn-light btn-link" id="remove-dependente">Remover</button>
+                <span id="msg"></span>
+                <input type="hidden" id="dependente-filiado" name="dependente_filiado">
+                <p>
+                    <div class="form-group" id="form-dependente">
+                        <label for="nome_dependente">Nome do Dependente</label>
+                        <input id="nome_dependente" type="text" class="form-control dependente"><br>
+                        <label for="data_nascimento_dependente">Data de Nascimento</label>
+                        <input id="data_nascimento_dependente" type="date" class="form-control dependente"><br>
+                        <label for="parentesco_dependente">Grau de parentesco</label>
+                        <input id="parentesco_dependente" type="text" class="form-control dependente"><br>
+                        <button type="button" class="btn btn-danger" align="left" id="btn-cancelar">Cancelar</button>
+                        <button type="button" class="btn btn-success" align="right" id="btn-salvar">Salvar dependente</button>
+                    </div>
+                </p>
 			</div>
-			<input type="submit" class="btn btn-success btn-block" value="Salvar">
-		</div>
-		<div class="col-md-6 col-md-offset-3">
-			<a href="#" name="adiciona-dependente">Adicionar dependente</a>
-			<div class="form-group" name="form-dependente">
-				<label for="nome_dependente">Nome</label>
-				<input name="nome_dependente" type="text" class="form-control"><br>
-				<label for="data_nascimento_dependente">Data de Nascimento</label>
-				<input name="data_nascimento_dependente" type="date" class="form-control"><br>
-				<label for="parentesco_dependente">Grau de parentesco</label>
-				<input name="parentesco_dependente" type="text" class="form-control"><br>
-			</div>
+			<br><input type="submit" class="btn btn-success btn-block" value="Salvar">
 		</div>
 	</div>
 </form>
+
+<script src="<?php echo CAMINHO_PADRAO_WEB; ?>js/inserir-filiado.js"></script>
