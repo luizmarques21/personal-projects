@@ -1,9 +1,8 @@
 <?php
-	
-	
+
 /**
  * Class Globals
- * @version 1.0.0
+ * @version 1.0.1
  */
 class Globals {
 	
@@ -29,9 +28,10 @@ class Globals {
 	 * @return mixed|null
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.0.1 - Alterada verificação do indice
 	 */
 	public function get(string $sIndice) {
-		if (!empty($this->aGET[$sIndice])) {
+		if (isset($this->aGET[$sIndice])) {
 			return $this->aGET[$sIndice];
 		}
 		
@@ -46,9 +46,10 @@ class Globals {
 	 * @return mixed|null
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.0.1 - Alteração da verificação do indice
 	 */
 	public function post(string $sIndice) {
-		if (!empty($this->aPOST[$sIndice])) {
+		if (isset($this->aPOST[$sIndice])) {
 			return $this->aPOST[$sIndice];
 		}
 		

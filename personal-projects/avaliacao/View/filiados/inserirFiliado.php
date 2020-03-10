@@ -1,15 +1,17 @@
+<script src="<?php echo CAMINHO_PADRAO_WEB; ?>js/lib/jquery-maskedinput.js"></script>
+
 <form action="../postcadastra/" method="post">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
 			<div class="form-group">
 				<label for="nome_filiado">Nome</label>
-				<input name="nome_filiado" type="text" class="form-control"><br>
+				<input name="nome_filiado" type="text" class="form-control" required><br>
 				<label for="cpf_filiado">CPF</label>
-				<input name="cpf_filiado" type="text" class="form-control"><br>
+				<input id="cpf-filiado" name="cpf_filiado" type="text" class="form-control" required><br>
 				<label for="rg_filiado">RG</label>
-				<input name="rg_filiado" type="text" class="form-control"><br>
+				<input name="rg_filiado" type="number" class="form-control" required><br>
 				<label for="data_nascimento_filiado">Data de Nascimento</label>
-				<input name="data_nascimento_filiado" type="date" class="form-control"><br>
+				<input name="data_nascimento_filiado" type="date" class="form-control" required><br>
 				<label for="empresa_filiado">Empresa</label>
 				<select name="empresa_filiado" class="form-control">
 					<?php
@@ -41,9 +43,9 @@
 					?>
 				</select><br>
 				<label for="telefone_filiado">Telefone Residencial</label>
-				<input name="telefone_filiado" type="text" class="form-control"><br>
+				<input id="telefone" name="telefone_filiado" type="text" class="form-control" required><br>
 				<label for="celular_filiado">Telefone Celular</label>
-				<input name="celular_filiado" type="text" class="form-control"><br>
+				<input id="celular" name="celular_filiado" type="text" class="form-control" required><br>
                 <label for="lista-dependentes" type="text">Dependentes</label>
                 <select id="lista-dependentes" class="form-control"></select>
                 <button type="button" class="btn btn-light btn-link" id="adiciona-dependente">Adicionar</button>
@@ -62,7 +64,7 @@
                         <button type="button" class="btn btn-success" align="right" id="btn-salvar">Salvar dependente</button>
                     </div>
                 </p>
-			</div>
+            </div>
 			<br><input type="submit" class="btn btn-success btn-block" value="Salvar">
 		</div>
 	</div>

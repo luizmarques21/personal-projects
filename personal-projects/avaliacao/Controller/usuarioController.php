@@ -2,22 +2,25 @@
 
 /**
  * Class usuarioController
- * @version 1.1.0
+ * @version 1.4.0
  */
 class usuarioController {
 	
 	private $oSessao;
 	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * usuarioController constructor.
 	 * @since 1.0.0 - Definição de versionamento da classe
 	 * @since 1.1.0 - Implementado uso do DC
+	 * @since 1.2.0 - Implementação do objeto Globais
+	 * @since 1.3.0 - Removida checagem de usuario ativo
 	 */
-	public function __construct() {
-		DependencyContainer::checaUsuarioAtivo();
+	public function __construct(Globals $oGlobais) {
 		$this->oSessao = DependencyContainer::getSessao();
 		$this->oView =  DependencyContainer::getView();
+		$this->oGlobais = $oGlobais;
 	}
 	
 	/**
@@ -29,14 +32,14 @@ class usuarioController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Removido metodo chamaCabecalho e
 	 * alterada a verificação do privilegio de usuario
+	 * @since 1.2.0 - Remoção do objeto Sessao
+	 * @since 1.3.0 - Removida checagem de permissao de usuario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function index(): void {
-		DependencyContainer::checaUsuarioADM();
 		$aUsuarios = (new usuarioDAO())->findAll();
 		$this->oView->setTitulo('Usuarios');
 		$this->oView->adicionaVariavel('aUsuarios', $aUsuarios);
-		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
 		$this->oView->exibeTemplate('usuarios/listarUsuarios.php', 'cabecalho.php');
 	}
 	
@@ -49,12 +52,12 @@ class usuarioController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Remocao do metodo chamaCabecalho e
 	 * alterada a verificação do privilegio do usuario
+	 * @since 1.2.0 - Remoção do objeto Sessao
+	 * @since 1.3.0 - Removida checagem de permissao de ususario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function cadastrar(): void {
-		DependencyContainer::checaUsuarioADM();
 		$this->oView->setTitulo('Criar novo usuario');
-		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
 		$this->oView->exibeTemplate('usuarios/inserirUsuario.php', 'cabecalho.php');
 	}
 	
@@ -66,14 +69,23 @@ class usuarioController {
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Alterada a verificação do privilegio do usuario
+	 * @since 1.2.0 - Remoção do objeto Sessao e implementação do objeto Globais
+	 * @since 1.3.0 - Removida checagem de permissao de usuario
+	 * @since 1.4.0 - Implementada logica para verificar se o usuario que vai ser excluido
+	 * é o mesmo que está logado no sistema
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function excluir(): void {
-		DependencyContainer::checaUsuarioADM();
-		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
-		$oUsuario->deleteUsuario();
-		$this->oSessao->setMensagem('Usuario excluido com sucesso');
-		header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
+		try {
+			$oUsuario = (new usuarioDAO())->findByID($this->oGlobais->get('id'));
+			$oUsuario->isUsuarioAtivo($this->oSessao->getUsuarioLogado());
+			$oUsuario->deleteUsuario();
+			Sessao::setMensagem('Usuario excluido com sucesso');
+		} catch (Exception $oException) {
+			Sessao::setMensagem($oException->getMessage());
+		} finally {
+			header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
+		}
 	}
 	
 	/**
@@ -85,14 +97,14 @@ class usuarioController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Removido metodo chamaCabecalho e
 	 * alterada a verificação do privilegio do usuario
+	 * @since 1.2.0 - Remoção do objeto Sessao e implementação do objeto Globais
+	 * @since 1.3.0 - Removida checagem de permissao de usuario
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		DependencyContainer::checaUsuarioADM();
-		$oUsuario = (new usuarioDAO())->findByID($_GET['id']);
+		$oUsuario = (new usuarioDAO())->findByID($this->oGlobais->get('id'));
 		$this->oView->setTitulo('Editar Usuario');
 		$this->oView->adicionaVariavel('oUsuario', $oUsuario);
-		$this->oView->adicionaVariavel('sLogado', $this->oSessao->getUsuarioLogado());
 		$this->oView->exibeTemplate('usuarios/editarUsuario.php', 'cabecalho.php');
 	}
 	
@@ -116,11 +128,16 @@ class usuarioController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.2.0 - Remoção do objeto Sessao e implementação do objeto Globais
 	 */
 	public function postCadastrar(): void {
-		$oUsuario = new Usuario($_POST['login'], $_POST['senha'], $_POST['tipo_usuario']);
+		$oUsuario = new Usuario(
+			$this->oGlobais->post('login'),
+			$this->oGlobais->post('senha'),
+			$this->oGlobais->post('tipo_usuario')
+		);
 		$oUsuario->saveUsuario();
-		$this->oSessao->setMensagem('Usuario cadastrado com sucesso!');
+		Sessao::setMensagem('Usuario cadastrado com sucesso!');
 		header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
 	}
 	
@@ -131,11 +148,16 @@ class usuarioController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.2.0 - Remoção do objeto Sessao e implementação do objeto Globais
 	 */
 	public function postEditar(): void {
-		$oUsuario = new Usuario($_POST['login'], $_POST['senha'], $_POST['tipo_usuario']);
-		$oUsuario->replaceUsuario($_POST['id']);
-		$this->oSessao->setMensagem('Usuario atualizado com sucesso!');
+		$oUsuario = new Usuario(
+			$this->oGlobais->post('login'),
+			$this->oGlobais->post('senha'),
+			$this->oGlobais->post('tipo_usuario')
+		);
+		$oUsuario->replaceUsuario($this->oGlobais->post('id'));
+		Sessao::setMensagem('Usuario atualizado com sucesso!');
 		header("Location: " . CAMINHO_PADRAO_WEB . "usuario/");
 	}
 	

@@ -13,6 +13,7 @@ class ComposerStaticInita6471fb27a135e8dd95bcfc5e2ad62cd
         'Dependente' => __DIR__ . '/../..' . '/Model/Dependente.php',
         'Empresa' => __DIR__ . '/../..' . '/Model/Empresa.php',
         'Filiado' => __DIR__ . '/../..' . '/Model/Filiado.php',
+        'Functions' => __DIR__ . '/../..' . '/Infra/Functions.php',
         'Globals' => __DIR__ . '/../..' . '/Infra/Globals.php',
         'JSONConfig' => __DIR__ . '/../..' . '/Infra/JSONConfig.php',
         'MoobiDataBaseHandler' => __DIR__ . '/../..' . '/Infra/MoobiDataBaseHandler.php',

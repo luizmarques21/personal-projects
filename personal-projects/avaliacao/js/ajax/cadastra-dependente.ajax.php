@@ -1,7 +1,8 @@
 <?php
 
 include_once __DIR__ . '/../../Infra/Config.php';
-$iFiliadoID = $oGlobais->get('filiadoID');
+
+$iFiliadoID = $oGlobais->post('filiadoID');
 $aFiliados = (new filiadoDAO())->findAll();
 
 ?>
@@ -11,11 +12,11 @@ $aFiliados = (new filiadoDAO())->findAll();
 		<div class="col-md-6 col-md-offset-3">
 			<div class="form-group">
                 <label for="nome_dependente">Nome do Dependente</label>
-				<input name="nome_dependente" type="text" class="form-control dependente"><br>
+				<input name="nome_dependente" type="text" class="form-control dependente" required><br>
 				<label for="data_nascimento_dependente">Data de Nascimento</label>
-				<input name="data_nascimento_dependente" type="date" class="form-control"><br>
+				<input name="data_nascimento_dependente" type="date" class="form-control" required><br>
 				<label for="parentesco_dependente">Grau de parentesco</label>
-				<input name="parentesco_dependente" type="text" class="form-control"><br>
+				<input name="parentesco_dependente" type="text" class="form-control" required><br>
 				<label for="filiado">Filiado</label>
 				<select name="filiado" class="form-control">
 					<?php

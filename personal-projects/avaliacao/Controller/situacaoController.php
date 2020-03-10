@@ -2,22 +2,23 @@
 
 /**
  * Class situacaoController
- * @version 1.1.0
+ * @version 1.3.0
  */
 class situacaoController {
 	
-	private $oSessao;
 	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * situacaoController constructor.
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Implementação do DC
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
+	 * @since 1.3.0 - Removida checagem de usuario ativo
 	 */
-	public function __construct() {
-		$this->oSessao = DependencyContainer::getSessao();
+	public function __construct(Globals $oGlobais) {
 		$this->oView = DependencyContainer::getView();
-		DependencyContainer::checaUsuarioAtivo();
+		$this->oGlobais = $oGlobais;
 	}
 	
 	/**
@@ -58,11 +59,12 @@ class situacaoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Remoção de verificação de usuario ativo
+	 * @since 1.2.0 - Remoção do objeto Sessao e implementação do objeto Globais
 	 */
 	public function excluir(): void {
-		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
+		$oSituacao = (new situacaoDAO())->findByID($this->oGlobais->get('id'));
 		$oSituacao->deleteSituacao();
-		$this->oSessao->setMensagem('Situacao excluida com sucesso');
+		Sessao::setMensagem('Situacao excluida com sucesso');
 		header("Location: " . CAMINHO_PADRAO_WEB . "situacao/");
 	}
 	
@@ -74,9 +76,10 @@ class situacaoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Remoção do metodo chamaCabecalho
+	 * @since 1.2.0 - Implementação do objeto Globais
 	 */
 	public function editar(): void {
-		$oSituacao = (new situacaoDAO())->findByID($_GET['id']);
+		$oSituacao = (new situacaoDAO())->findByID($this->oGlobais->get('id'));
 		$this->oView->setTitulo('Editar Situacao');
 		$this->oView->adicionaVariavel('oSituacao', $oSituacao);
 		$this->oView->exibeTemplate('situacoes/editarSituacao.php', 'cabecalho.php');
@@ -90,11 +93,12 @@ class situacaoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Alterado parametro do header
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
 	 */
 	public function postCadastra(): void {
-		$oSituacao = new Situacao($_POST['nome_situacao']);
+		$oSituacao = new Situacao($this->oGlobais->post('nome_situacao'));
 		$oSituacao->saveSituacao();
-		$this->oSessao->setMensagem('Situacao cadastrada com sucesso');
+		Sessao::setMensagem('Situacao cadastrada com sucesso');
 		header("Location: " . CAMINHO_PADRAO_WEB . "situacao/");
 	}
 	
@@ -106,11 +110,12 @@ class situacaoController {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Alterado parametro do header
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
 	 */
 	public function postEdita(): void {
-		$oSituacao = new Situacao($_POST['nome_situacao']);
-		$oSituacao->replaceSituacao($_POST['id']);
-		$this->oSessao->setMensagem('Situação atualizada com sucesso');
+		$oSituacao = new Situacao($this->oGlobais->post('nome_situacao'));
+		$oSituacao->replaceSituacao($this->oGlobais->post('id'));
+		Sessao::setMensagem('Situação atualizada com sucesso');
 		header("Location: " . CAMINHO_PADRAO_WEB . "situacao/");
 	}
 	

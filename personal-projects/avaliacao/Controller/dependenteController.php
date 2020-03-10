@@ -2,19 +2,22 @@
 
 /**
  * Class dependenteController
- * @version 1.0.0
+ * @version 1.2.0
  */
 class dependenteController {
 	
 	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * dependenteController constructor.
 	 * @since 1.0.0 - Definição de versionamento da classe
+	 * @since 1.1.0 - Implementação da classe Globals
+	 * @since 1.2.0 - Removida checagem de usuario ativo
 	 */
-	public function __construct() {
+	public function __construct(Globals $oGlobals) {
 		$this->oView = DependencyContainer::getView();
-		DependencyContainer::checaUsuarioAtivo();
+		$this->oGlobais = $oGlobals;
 	}
 	
 	/**
@@ -40,9 +43,11 @@ class dependenteController {
 	 * @throws Exception
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do objeto Globais
 	 */
 	public function excluir(): void {
-		$oDependente = (new dependenteDAO())->findByID($_GET['id']);
+		$iDependenteID = $this->oGlobais->get('id');
+		$oDependente = (new dependenteDAO())->findByID($iDependenteID);
 		$oDependente->deleteDependente();
 		Sessao::setMensagem('Dependente excluido com sucesso');
 		header("Location: " . CAMINHO_PADRAO_WEB . "dependente/");
@@ -69,9 +74,11 @@ class dependenteController {
 	 * @throws Exception
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do objeto Globais
 	 */
 	public function editar(): void {
-		$oDependente = (new dependenteDAO())->findByID($_GET['id']);
+		$iDependenteID = $this->oGlobais->get('id');
+		$oDependente = (new dependenteDAO())->findByID($iDependenteID);
 		$this->oView->setTitulo('Editar dependente');
 		$this->oView->adicionaVariavel('oDependente', $oDependente);
 		$this->oView->exibeTemplate('dependentes/editarDependente.php', 'cabecalho.php');
@@ -85,14 +92,16 @@ class dependenteController {
 	 * @throws Exception
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do objeto Globals
 	 */
 	public function postCadastra(): void {
 		$oDependente = new Dependente(
-			$_POST['nome_dependente'],
-			$_POST['data_nascimento_dependente'],
-			$_POST['parentesco_dependente']
+			$this->oGlobais->post('nome_dependente'),
+			$this->oGlobais->post('data_nascimento_dependente'),
+			$this->oGlobais->post('parentesco_dependente')
 		);
-		$oDependente->setFiliado($_POST['filiado']);
+		$mFiliadoID = $this->oGlobais->post('filiado');
+		$oDependente->setFiliado($mFiliadoID);
 		$oDependente->saveDependente();
 		Sessao::setMensagem('Dependente cadastrado com sucesso');
 		header("Location: " . CAMINHO_PADRAO_WEB . "dependente/");
@@ -106,15 +115,18 @@ class dependenteController {
 	 * @throws Exception
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do objeto Globals
 	 */
 	public function postEdita(): void {
 		$oDependente = new Dependente(
-			$_POST['nome_dependente'],
-			$_POST['data_nascimento_dependente'],
-			$_POST['parentesco_dependente']
+			$this->oGlobais->post('nome_dependente'),
+			$this->oGlobais->post('data_nascimento_dependente'),
+			$this->oGlobais->post('parentesco_dependente')
 		);
-		$oDependente->setFiliado($_POST['filiado']);
-		$oDependente->replaceDependente($_POST['id']);
+		$mFiliadoID = $this->oGlobais->post('filiado');
+		$oDependente->setFiliado($mFiliadoID);
+		$mDependenteID = $this->oGlobais->post('id');
+		$oDependente->replaceDependente($mDependenteID);
 		Sessao::setMensagem('Dependente atualizado com sucesso');
 		header("Location: " . CAMINHO_PADRAO_WEB . "dependente/");
 	}

@@ -2,7 +2,7 @@
 
 /**
  * Class loginController
- * @version 1.2.0
+ * @version 1.3.0
  */
 class loginController {
 	
@@ -45,9 +45,9 @@ class loginController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 * @since 1.1.0 - Removida chamada a metodo para exibir cabeçalho
 	 * e adicionada verificação de usuario ativo
+	 * @since 1.3.0 - Removida checagem de usuario ativo
 	 */
 	public function home(): void {
-		DependencyContainer::checaUsuarioAtivo();
 		$this->oView->setTitulo('Sindicato dos Trainees - Home');
 		$sLogado = $this->oSessao->getUsuarioLogado();
 		$this->oView->adicionaVariavel('sLogado', $sLogado);

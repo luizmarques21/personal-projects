@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class Filiado
+ * @version 1.0.0
+ */
 class Filiado {
 	
 	private $iID;
@@ -16,6 +20,20 @@ class Filiado {
 	private $aDependentes;
 	private $oDAO;
 	
+	/**
+	 * Filiado constructor.
+	 * @param $sNomeFiliado
+	 * @param $sCPF
+	 * @param $sRG
+	 * @param $tDataNascimento
+	 * @param $mEmpresa
+	 * @param $mCargo
+	 * @param $mSituacao
+	 * @param $sTelResidencial
+	 * @param $sTelCelular
+	 * @throws Exception
+	 * @since 1.0.0 - Definição de versionamento da classe
+	 */
 	public function __construct(
 		$sNomeFiliado,
 		$sCPF,
@@ -39,7 +57,17 @@ class Filiado {
 		$this->oDAO = new filiadoDAO();
 	}
 	
-	public static function createFromArray(array $aDados) {
+	/**
+	 * Cria um Filiado a partir de um array
+	 *
+	 * @param array $aDados
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return Filiado
+	 * @throws Exception
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public static function createFromArray(array $aDados): Filiado {
 		$oFiliado = new Filiado(
 			$aDados['flo_nome'],
 			$aDados['flo_cpf'],
@@ -56,72 +84,198 @@ class Filiado {
 		return $oFiliado;
 	}
 	
-	private function setID($iID) {
+	/**
+	 * Define o ID
+	 *
+	 * @param int $iID
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	private function setID(int $iID): void {
 		$this->iID = $iID;
 	}
 	
-	public function setDataAtualizacao($tDataAtualizacao) {
+	/**
+	 * Define a data da ultima atualizacao
+	 *
+	 * @param DateTimeImmutable|string $tDataAtualizacao
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 * @throws Exception
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function setDataAtualizacao($tDataAtualizacao): void {
 		if (!is_object($tDataAtualizacao))
 			$tDataAtualizacao = new DateTimeImmutable($tDataAtualizacao);
 		$this->tDataAtualizacao = $tDataAtualizacao;
 	}
 	
-	public function setDependentes($aDependentes) {
+	/**
+	 * Define os dependentes de um filiado
+	 *
+	 * @param array $aDependentes
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function setDependentes(array $aDependentes): void {
 		$this->aDependentes = $aDependentes;
 	}
 	
-	public function getID() {
+	/**
+	 * Retorna o ID
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return int
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getID(): int {
 		return $this->iID;
 	}
 	
-	public function getNome() {
+	/**
+	 * Retorna o nome
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getNome(): string {
 		return $this->sNomeFiliado;
 	}
 	
-	public function getCPF() {
+	/**
+	 * Retorna o CPF
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getCPF(): string {
 		return $this->sCPF;
 	}
 	
-	public function getRG() {
+	/**
+	 * Retorna o RG
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getRG(): string {
 		return $this->sRG;
 	}
 	
-	public function getDataNascimento($sFormato = '') {
+	/**
+	 * Retorna a data de nascimento
+	 *
+	 * @param string $sFormato
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getDataNascimento(string $sFormato = ''): string {
 		if ($sFormato != '')
 			return $this->tDataNascimento->format($sFormato);
 		else
 			return $this->tDataNascimento->format('Y-m-d');
 	}
 	
+	/**
+	 * Retorna a empresa
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string|int
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
 	public function getEmpresa() {
 		return $this->mEmpresa;
 	}
 	
+	/**
+	 * Retorna o Cargo
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string|int
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
 	public function getCargo() {
 		return $this->mCargo;
 	}
 	
+	/**
+	 * Retorna a situação
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string|int
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
 	public function getSituacao() {
 		return $this->mSituacao;
 	}
 	
-	public function getDataAtualizacao() {
+	/**
+	 * Retorna a data de atualizacao
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getDataAtualizacao(): string {
 		return $this->tDataAtualizacao->format('d/m/Y H:i');
 	}
 	
-	public function getTelResidencial() {
+	/**
+	 * Retorna o telefone
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getTelResidencial(): string {
 		return $this->sTelResidencial;
 	}
 	
-	public function getTelCelular() {
+	/**
+	 * Retorna o celular
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function getTelCelular(): string {
 		return $this->sTelCelular;
 	}
 	
-	public function saveFiliado() {
+	/**
+	 * Salva um filiado e seus dependentes no banco
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function saveFiliado(): void {
 		$aDados = $this->createToArray();
 		try {
 			$this->oDAO->save($aDados);
 			$iFiliadoID = $this->oDAO->getLastID();
+			$this->setID($iFiliadoID);
 			
 			if (!empty($this->aDependentes)) {
 				foreach ($this->aDependentes as $aDependente) {
@@ -130,20 +284,37 @@ class Filiado {
 						$aDependente->dataNascimento,
 						$aDependente->parentesco
 					);
-					$oDependente->setFiliado($iFiliadoID);
-					$oDependente->saveDependente();
+					$this->adicionaDependente($oDependente);
+					/*$oDependente->setFiliado($iFiliadoID);
+					$oDependente->saveDependente();*/
 				}
 			}
-		} catch (Exception $e) {
-			echo $e->getMessage();
+		} catch (Exception $oException) {
+			echo $oException->getMessage();
 		}
 	}
 	
-	public function deleteFiliado() {
+	/**
+	 * Remove logicamente um filiado do banco
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function deleteFiliado(): void {
 		$this->oDAO->delete($this->iID);
 	}
 	
-	private function createToArray() {
+	/**
+	 * Cria um array a partir dos dados do Filiado
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return array
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	private function createToArray(): array {
 		return array(
 			'flo_nome' => $this->sNomeFiliado,
 			'flo_cpf' => $this->sCPF,
@@ -158,9 +329,60 @@ class Filiado {
 		);
 	}
 	
-	public function replaceFiliado($iID) {
+	/**
+	 * Atualiza os dados do filiado no banco
+	 *
+	 * @param int $iID
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function replaceFiliado(int $iID): void {
 		$this->setID($iID);
 		$this->oDAO->replace($this->createToArray(), $iID);
+	}
+	
+	/**
+	 * Adiciona um dependente ligado ao filiado
+	 *
+	 * @param Dependente $oDependente
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function adicionaDependente(Dependente $oDependente): void {
+		$oDependente->setFiliado($this->iID);
+		$oDependente->saveDependente();
+	}
+	
+	/**
+	 * Exclui um dependente ligado ao filiado
+	 *
+	 * @param Dependente $oDependente
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function excluiDependente(Dependente $oDependente): void {
+		$oDependente->deleteDependente();
+	}
+	
+	/**
+	 * Atualiza os dados de um dependente ligado ao filiado
+	 *
+	 * @param Dependente $oDependente
+	 * @param int|string $mID
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 */
+	public function atualizaDependente(Dependente $oDependente, $mID): void {
+		$oDependente->setFiliado($this->iID);
+		$oDependente->replaceDependente($mID);
 	}
 	
 }

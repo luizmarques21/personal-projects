@@ -8,6 +8,9 @@ var iptDependente = $('#dependente-filiado');
 
 $('document').ready(function () {
     form.hide();
+    $('#cpf-filiado').mask('999.999.999-99');
+    $('#telefone').mask('(99)9999-9999');
+    $('#celular').mask('(99)99999-9999');
 });
 
 btnAdiciona.click(function () {

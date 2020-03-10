@@ -58,7 +58,7 @@
                         <td><?php echo $oFiliado->getNome(); ?></td>
                         <td><?php echo $oFiliado->getCPF(); ?></td>
                         <td><?php echo $oFiliado->getRG(); ?></td>
-                        <td><?php echo $oFiliado->getDataNascimento(); ?></td>
+                        <td><?php echo $oFiliado->getDataNascimento('d/m/Y'); ?></td>
                         <td><?php echo $oFiliado->getEmpresa(); ?></td>
                         <td><?php echo $oFiliado->getCargo(); ?></td>
                         <td><?php echo $oFiliado->getSituacao(); ?></td>

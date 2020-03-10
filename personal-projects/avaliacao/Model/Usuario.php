@@ -2,7 +2,7 @@
 
 /**
  * Class Usuario
- * @version 1.0.0
+ * @version 1.1.0
  */
 class Usuario {
 	
@@ -192,6 +192,21 @@ class Usuario {
 	public static function isADM(string $sNome): bool {
 		$sTipo = (new usuarioDAO())->findByUsername($sNome)->getTipo();
 		return $sTipo == 'A' ? true : false;
+	}
+	
+	/**
+	 * Verifica se o objeto Usuario é o mesmo que está logado no sistema
+	 *
+	 * @param string $sUsuarioAtivo
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 * @throws Exception
+	 *
+	 * @since 1.1.0 - Definição do versionamento da classe
+	 */
+	public function isUsuarioAtivo(string $sUsuarioAtivo): void {
+		if ($this->getLogin() == $sUsuarioAtivo)
+			throw new Exception ('Usuario ativo no sistema');
 	}
 	
 }

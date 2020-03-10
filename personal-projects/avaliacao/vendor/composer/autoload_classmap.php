@@ -12,6 +12,7 @@ return array(
     'Dependente' => $baseDir . '/Model/Dependente.php',
     'Empresa' => $baseDir . '/Model/Empresa.php',
     'Filiado' => $baseDir . '/Model/Filiado.php',
+    'Functions' => $baseDir . '/Infra/Functions.php',
     'Globals' => $baseDir . '/Infra/Globals.php',
     'JSONConfig' => $baseDir . '/Infra/JSONConfig.php',
     'MoobiDataBaseHandler' => $baseDir . '/Infra/MoobiDataBaseHandler.php',
