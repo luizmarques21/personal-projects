@@ -1,0 +1,14 @@
+SELECT
+	ff.flo_id, ff.flo_nome, ff.flo_rg, ff.flo_cpf, ff.flo_data_nascimento,
+	ee.ems_nome, cc.cro_nome, ss.sto_nome, ff.flo_data_atualizacao, ff.flo_residencial, ff.flo_celular
+FROM flo_filiado ff
+ INNER JOIN ems_empresa ee ON ff.ems_id=ee.ems_id
+ INNER JOIN cro_cargo cc ON ff.cro_id=cc.cro_id
+ INNER JOIN sto_situacao ss ON ff.sto_id=ss.sto_id
+WHERE flo_data_remocao IS NULL
+
+SELECT
+    dd.dpe_id, dd.dpe_nome, dd.dpe_data_nascimento, dd.dpe_grau_parentesco, ff.flo_nome
+FROM dpe_dependente dd
+INNER JOIN flo_filiado ff ON dd.flo_id = ff.flo_id
+WHERE dpe_data_remocao IS NULL
