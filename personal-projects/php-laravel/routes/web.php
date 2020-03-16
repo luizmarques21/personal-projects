@@ -16,13 +16,13 @@ Route::get('/', function () {
 });
 
 Route::get('/series', 'SeriesController@index')->name('listar_series');
-Route::get('/series/criar', 'SeriesController@create')->name('form_criar_serie')->middleware('auth');
-Route::post('/series/criar', 'SeriesController@store')->middleware('auth');
-Route::delete('/series/{id}', 'SeriesController@destroy')->middleware('auth');
+Route::get('/series/criar', 'SeriesController@create')->name('form_criar_serie')->middleware('autenticador');
+Route::post('/series/criar', 'SeriesController@store')->middleware('autenticador');
+Route::delete('/series/{id}', 'SeriesController@destroy')->middleware('autenticador');
 Route::get('/series/{serieId}/temporadas', 'TemporadasController@index');
-Route::post('/series/{id}/editaNome', 'SeriesController@editaNome')->middleware('auth');
+Route::post('/series/{id}/editaNome', 'SeriesController@editaNome')->middleware('autenticador');
 Route::get('/temporadas/{temporada}/episodios', 'EpisodiosController@index');
-Route::post('/temporada/{temporada}/episodios/assistir', 'EpisodiosController@assistir')->middleware('auth');
+Route::post('/temporada/{temporada}/episodios/assistir', 'EpisodiosController@assistir')->middleware('autenticador');
 Route::get('/entrar', 'EntrarController@index');
 Route::post('/entrar', 'EntrarController@entrar');
 Route::get('/registrar', 'RegistroController@create');
