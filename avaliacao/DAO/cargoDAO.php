@@ -2,7 +2,7 @@
 
 /**
  * Class cargoDAO
- * @version 1.0.0
+ * @version 1.1.1
  */
 class cargoDAO {
 	
@@ -10,10 +10,11 @@ class cargoDAO {
 	
 	/**
 	 * cargoDAO constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementação do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler();
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	/**
@@ -23,9 +24,10 @@ class cargoDAO {
 	 * @return array
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.1 - Adicionado parametro na query para filtrar registros removidos
 	 */
 	public function findAll(): array {
-		$sQuery = 'SELECT * FROM cro_cargo';
+		$sQuery = 'SELECT * FROM cro_cargo WHERE cro_data_remocao IS NULL';
 		return $this->oDBHandler->query($sQuery);
 	}
 	
@@ -66,10 +68,11 @@ class cargoDAO {
 	 * @return bool
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.1 - Alterado metodo para exclusao logica
 	 */
 	public function delete(int $iID): bool {
-		$sQuery = 'DELETE FROM cro_cargo WHERE cro_id = ?';
-		return $this->oDBHandler->execute($sQuery, [$iID]);
+		$sQuery = 'UPDATE cro_cargo SET cro_data_remocao = ? WHERE cro_id = ?';
+		return $this->oDBHandler->execute($sQuery, [date('Y-m-d H:i:s'), $iID]);
 	}
 	
 	/**

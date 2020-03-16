@@ -2,18 +2,23 @@
 
 /**
  * Class empresaController
- * @version 1.0.0
+ * @version 1.3.0
  */
 class empresaController {
 	
-	private $oSessao;
+	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * empresaController constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
+	 * @since 1.2.0 - Implementação do objeto Globais
+	 * @since 1.3.0 - Removida checagem de usuario ativo
 	 */
-	public function __construct() {
-		$this->oSessao = new Sessao();
+	public function __construct(Globals $oGlobals) {
+		$this->oView = DependencyContainer::getView();
+		$this->oGlobais = $oGlobals;
 	}
 	
 	/**
@@ -23,11 +28,15 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho e
+	 * alterada a verificação de usuario ativo
+	 * @since 1.2.0 - Remoção do objeto Sessao
 	 */
 	public function index(): void {
-		$sTitulo = 'Empresas';
 		$aEmpresas = (new empresaDAO())->findAll();
-		include __DIR__ . '/../View/empresas/listarEmpresas.php';
+		$this->oView->setTitulo('Empresas');
+		$this->oView->adicionaVariavel('aEmpresas', $aEmpresas);
+		$this->oView->exibeTemplate('empresas/listarEmpresas.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -37,10 +46,11 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho
 	 */
 	public function cadastrar(): void {
-		$sTitulo = 'Criar nova empresa';
-		include __DIR__ . '/../View/empresas/inserirEmpresa.php';
+		$this->oView->setTitulo('Criar nova empresa');
+		$this->oView->exibeTemplate('empresas/inserirEmpresa.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -50,13 +60,15 @@ class empresaController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida verificação de usuario ativo
+	 * @since 1.2.0 - Implementado o objeto Globais
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function excluir(): void {
-		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
+		$oEmpresa = (new empresaDAO())->findByID($this->oGlobais->get('id'));
 		$oEmpresa->deleteEmpresa();
-		$this->oSessao->setMensagem('Empresa excluida com sucesso');
-		header("Location: ../../empresa/");
+		Sessao::setMensagem('Empresa excluida com sucesso');
+		header("Location: " . CAMINHO_PADRAO_WEB . "empresa/");
 	}
 	
 	/**
@@ -66,12 +78,15 @@ class empresaController {
 	 *
 	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabeçalho
+	 * @since 1.2.0 - Implementado o objeto Globais
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function editar(): void {
-		$oEmpresa = (new empresaDAO())->findByID($_GET['id']);
-		$sTitulo = 'Editar empresa';
-		include __DIR__ . '/../View/empresas/editarEmpresa.php';
+		$oEmpresa = (new empresaDAO())->findByID($this->oGlobais->get('id'));
+		$this->oView->setTitulo('Editar empresa');
+		$this->oView->adicionaVariavel('oEmpresa', $oEmpresa);
+		$this->oView->exibeTemplate('empresas/editarEmpresa.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -81,12 +96,14 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o parametro do header
+	 * @since 1.2.0 - Removido o objeto Sessao e implementado o objeto Globais
 	 */
 	public function postCadastra() {
-		$oEmpresa = new Empresa($_POST['nome_empresa']);
+		$oEmpresa = new Empresa($this->oGlobais->post('nome_empresa'));
 		$oEmpresa->saveEmpresa();
-		$this->oSessao->setMensagem('Empresa cadastrada com sucesso');
-		header("Location: ../../empresa/");
+		Sessao::setMensagem('Empresa cadastrada com sucesso');
+		header("Location: ". CAMINHO_PADRAO_WEB . "empresa/");
 	}
 	
 	/**
@@ -96,12 +113,14 @@ class empresaController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o parametro do header
+	 * @since 1.2.0 - Removido o objeto Sessao e implementado o objeto Globais
 	 */
 	public function postEdita() {
-		$oEmpresa = new Empresa($_POST['nome_empresa']);
-		$oEmpresa->replaceEmpresa($_POST['id']);
-		$this->oSessao->setMensagem('Empresa atualizada com sucesso');
-		header("Location: ../../empresa/");
+		$oEmpresa = new Empresa($this->oGlobais->post('nome_empresa'));
+		$oEmpresa->replaceEmpresa($this->oGlobais->post('id'));
+		Sessao::setMensagem('Empresa atualizada com sucesso');
+		header("Location: ". CAMINHO_PADRAO_WEB . "empresa/");
 	}
 	
 }

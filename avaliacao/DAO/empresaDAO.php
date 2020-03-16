@@ -2,7 +2,7 @@
 
 /**
  * Class empresaDAO
- * @version 1.0.0
+ * @version 1.1.1
  */
 class empresaDAO {
 	
@@ -10,10 +10,11 @@ class empresaDAO {
 	
 	/**
 	 * empresaDAO constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler();
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	/**
@@ -23,9 +24,10 @@ class empresaDAO {
 	 * @return array
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.1 - Adicionado parametro na query para filtrar registros removidos
 	 */
 	public function findAll(): array {
-		$sQuery = 'SELECT * FROM ems_empresa';
+		$sQuery = 'SELECT * FROM ems_empresa WHERE ems_data_remocao IS NULL';
 		return $this->oDBHandler->query($sQuery);
 	}
 	
@@ -66,10 +68,11 @@ class empresaDAO {
 	 * @return bool
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.1 - Alterado metodo para exclusao logica
 	 */
 	public function delete(int $iID): bool {
-		$sQuery = 'DELETE FROM ems_empresa WHERE ems_id = ?';
-		return $this->oDBHandler->execute($sQuery, [$iID]);
+		$sQuery = 'UPDATE ems_empresa SET ems_data_remocao = ? WHERE ems_id = ?';
+		return $this->oDBHandler->execute($sQuery, [date('Y-m-d H:i:s'), $iID]);
 	}
 	
 	/**

@@ -1,5 +1,3 @@
-<?php include __DIR__ . '/../cabecalho.php'; ?>
-
 <div class="row">
 	<div class="col-md-4">
 		<a href="cadastrar/" class="btn btn-info btn-block">Criar Novo Usuario</a>
@@ -15,6 +13,7 @@
 					<th>ID</th>
 					<th>Login</th>
 					<th>Tipo</th>
+                    <th></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -23,7 +22,7 @@
 					<tr>
 						<td><?php echo $oUsuario->getID(); ?></td>
 						<td><?php echo $oUsuario->getLogin(); ?></td>
-						<td><?php echo $oUsuario->getTipo() ?></td>
+						<td><?php echo $oUsuario->getTipo() == 'A'?'Administrador':'Comum' ?></td>
 						<td align="right">
 							<a href="editar/<?php echo $oUsuario->getID() ?>" class="btn btn-info">Editar</a>
 							<a href="excluir/<?php echo $oUsuario->getID() ?>" class="btn btn-danger">Excluir</a>
@@ -37,5 +36,3 @@
 		<?php endif; ?>
 	</div>
 </div>
-
-<?php include __DIR__ . '/../rodape.php'; ?>

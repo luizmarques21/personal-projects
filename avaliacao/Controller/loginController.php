@@ -2,18 +2,25 @@
 
 /**
  * Class loginController
- * @version 1.0.0
+ * @version 1.3.0
  */
 class loginController {
 	
 	private $oSessao;
+	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * loginController constructor.
-	 * @since 1.0.0
+	 * @param Globals $oGlobais
+	 * @since 1.0.0 - Definição de versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
+	 * @since 1.2.0 - Implementado o uso da classe Globals
 	 */
-	public function __construct() {
-		$this->oSessao = new Sessao();
+	public function __construct(Globals $oGlobais) {
+		$this->oSessao = DependencyContainer::getSessao();
+		$this->oView = DependencyContainer::getView();
+		$this->oGlobais = $oGlobais;
 	}
 	
 	/**
@@ -25,8 +32,8 @@ class loginController {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function index(): void {
-		$sTitulo = 'Sindicato dos Trainees - Login';
-		include __DIR__ . '/../View/loginForm.php';
+		$this->oView->setTitulo('Sindicato dos Trainees - Login');
+		$this->oView->exibeTemplate('loginForm.php');
 	}
 	
 	/**
@@ -36,11 +43,15 @@ class loginController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada a metodo para exibir cabeçalho
+	 * e adicionada verificação de usuario ativo
+	 * @since 1.3.0 - Removida checagem de usuario ativo
 	 */
 	public function home(): void {
-		$sTitulo = 'Sindicato dos trainees - Home';
+		$this->oView->setTitulo('Sindicato dos Trainees - Home');
 		$sLogado = $this->oSessao->getUsuarioLogado();
-		include __DIR__ . '/../View/home.php';
+		$this->oView->adicionaVariavel('sLogado', $sLogado);
+		$this->oView->exibeTemplate('home.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -50,18 +61,22 @@ class loginController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.2.0 - Implementação da classe Globals
 	 */
 	public function validaLogin(): void {
-		$oLogin = new Login($_POST['usuario'], $_POST['senha']);
-		$oUsuario = (new usuarioDAO())->findByUsername($oLogin->getUsuario());
-		$bSenhaValida = $oUsuario->validaSenha($oLogin->getSenha());
-		if (!is_null($oUsuario->getLogin()) && $bSenhaValida == true) {
-			$this->oSessao->registraUsuarioLogado($oUsuario->getLogin(), $oUsuario->getTipo());
-			$this->oSessao->clearMensagem();
-			header("Location: home");
-		} else {
-			$this->oSessao->setMensagem('Usuario e/ou senha invalidos');
-			header("Location: ../");
+		try{
+			$oAutenticador = new Autenticador(
+				$this->oGlobais->post('usuario'),
+				$this->oGlobais->post('senha')
+			);
+			$oUsuario = (new usuarioDAO())->findByUsername($oAutenticador->getUsuario());
+			if (!$oAutenticador->validaSenha($oUsuario->getSenha()))
+				throw new Exception('Senha invalida');
+			$this->oSessao->registraUsuarioLogado($oUsuario->getLogin());
+			header("Location: home/");
+		} catch(Exception $oEx) {
+			$this->oSessao->setMensagem($oEx->getMessage());
+			$this->index();
 		}
 	}
 	

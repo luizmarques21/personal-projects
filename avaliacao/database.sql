@@ -1,41 +1,46 @@
 CREATE TABLE ems_empresa (
 	ems_id INT NOT NULL AUTO_INCREMENT,
 	ems_nome VARCHAR(255),
+	ems_data_remocao DATETIME,
 	PRIMARY KEY(ems_id)
 );
 
 CREATE TABLE cro_cargo (
 	cro_id INT NOT NULL AUTO_INCREMENT,
 	cro_nome VARCHAR(255),
+	cro_data_remocao DATETIME,
 	PRIMARY KEY(cro_id)
 );
 
 CREATE TABLE sto_situacao (
 	sto_id INT NOT NULL AUTO_INCREMENT,
 	sto_nome VARCHAR(255),
+	sto_data_remocao DATETIME,
 	PRIMARY KEY(sto_id)
 );
 
 CREATE TABLE usi_usuario (
 	usi_id INT NOT NULL AUTO_INCREMENT,
-	usi_login VARCHAR(255),
-	usi_senha VARCHAR(255),
-	usi_tipo_usuario VARCHAR(255),
+	usi_login VARCHAR(100),
+	usi_senha VARCHAR(60),
+	usi_tipo_usuario CHAR(1),
+	usi_data_remocao DATETIME,
 	PRIMARY KEY(usi_id)
 );
 
 CREATE TABLE flo_filiado (
 	flo_id INT NOT NULL AUTO_INCREMENT,
 	flo_nome VARCHAR(255),
-	flo_cpf VARCHAR(255),
-	flo_rg VARCHAR(255),
+	flo_cpf VARCHAR(14),
+	flo_rg VARCHAR(8),
 	flo_data_nascimento DATE,
 	ems_id INT,
 	cro_id INT,
 	sto_id INT,
-	flo_data_atualizacao DATE,
-	flo_residencial VARCHAR(255),
-	flo_celular VARCHAR(255),
+	flo_data_atualizacao DATETIME,
+	flo_residencial VARCHAR(9),
+	flo_celular VARCHAR(10),
+	flo_data_remocao DATETIME,
 	PRIMARY KEY(flo_id)
 );
 
@@ -43,8 +48,9 @@ CREATE TABLE dpe_dependente (
 	dpe_id INT NOT NULL AUTO_INCREMENT,
 	dpe_nome VARCHAR(255),
 	dpe_data_nascimento DATE,
-	dpe_grau_parentesco VARCHAR(255),
+	dpe_grau_parentesco VARCHAR(60),
 	flo_id INT,
+	dpe_data_remocao DATETIME,
 	PRIMARY KEY(dpe_id)
 );
 
@@ -56,7 +62,7 @@ ALTER TABLE dpe_dependente ADD CONSTRAINT fk_dependente_filiado FOREIGN KEY (flo
 
 
 INSERT INTO usi_usuario (usi_login, usi_senha, usi_tipo_usuario) 
-VALUES ('admin', '$2y$10$Bye97ZNOjN4szwH4EDJ1AeH3zFR4ZWMo0wPxTVmlnbV2dtyUd/vKu', 'Administrador');
+VALUES ('admin', '$2y$10$Bye97ZNOjN4szwH4EDJ1AeH3zFR4ZWMo0wPxTVmlnbV2dtyUd/vKu', 'A');
 
 INSERT INTO ems_empresa (ems_nome) VALUES ('Flamengo');
 INSERT INTO ems_empresa (ems_nome) VALUES ('Vasco');

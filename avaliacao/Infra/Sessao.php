@@ -2,23 +2,40 @@
 
 /**
  * Class Sessao
- * @version 1.0.0
+ * @version 1.1.0
  */
 class Sessao {
 	
 	/**
-	 * Registra os dados do usuario logado na sessão
+	 * Inicializa a sessão
 	 *
-	 * @param $sNome
-	 * @param $sTipo
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
-	public function registraUsuarioLogado(string $sNome, string $sTipo): void {
-		$_SESSION['logado']['nome'] = $sNome;
-		$_SESSION['logado']['tipo'] = $sTipo;
+	public function iniciaSessao(): void {
+		if (session_status() !== PHP_SESSION_ACTIVE) {
+			session_start();
+		}
+		if (!isset($_SESSION['mensagem']))
+			$_SESSION['mensagem'] = '';
+		if (!isset($_SESSION['logado']))
+			$_SESSION['logado'] = '';
+	}
+	
+	/**
+	 * Registra os dados do usuario logado na sessão
+	 *
+	 * @param string $sNome
+	 * @return void
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Metodo renomeado
+	 */
+	public function registraUsuarioLogado(string $sNome): void {
+		$_SESSION['logado'] = $sNome;
 	}
 	
 	/**
@@ -28,24 +45,10 @@ class Sessao {
 	 * @return string
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Metodo renomeado
 	 */
 	public function getUsuarioLogado(): string {
-		return $_SESSION['logado']['nome'];
-	}
-	
-	/**
-	 * Retorna se o usuario logado é administrador
-	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
-	 * @return bool
-	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
-	 */
-	public function isADM(): bool {
-		if ($_SESSION['logado']['tipo'] == 'Administrador')
-			return true;
-		else
-			return false;
+		return $_SESSION['logado'];
 	}
 	
 	/**
@@ -55,48 +58,50 @@ class Sessao {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removido redirecionamento de pagina
 	 */
 	public function deslogaUsuario(): void {
 		unset($_SESSION['logado']);
-		$this->clearMensagem();
-		header("Location: /login");
 	}
 	
 	/**
-	 * Define qual a mensagem que será exibida ao usuario
+	 * Retorna se há um usuario ativo no sistema e cadastrado na sessão
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return bool
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Metodo renomeado
+	 */
+	public function hasUsuarioAtivo(): bool {
+		return (strlen($_SESSION['logado']) > 0);
+	}
+	
+	/**
+	 * Retorna a mensagem salva na sessão
+	 *
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return string
+	 *
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o tipo do metodo
+	 */
+	public static function getMensagem(): string {
+		return $_SESSION['mensagem'];
+	}
+	
+	/**
+	 * Define a mensagem a ser salva na sessão
 	 *
 	 * @param string $sMensagem
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o tipo do metodo
 	 */
-	public function setMensagem(string $sMensagem): void {
+	public static function setMensagem(string $sMensagem): void {
 		$_SESSION['mensagem'] = $sMensagem;
 	}
-	
-	/**
-	 * Retorna a mensagem que será exibida
-	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
-	 * @return string
-	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
-	 */
-	public function getMensagem(): string {
-		return $_SESSION['mensagem'];
-	}
-	
-	/**
-	 * Limpa a mensagem que está salva na sessão
-	 *
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
-	 * @return void
-	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
-	 */
-	public function clearMensagem(): void {
-		unset($_SESSION['mensagem']);
-	}
-	
+
 }

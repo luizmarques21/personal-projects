@@ -4,21 +4,31 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3578481ad67fa219245f95517f97c611
+class ComposerStaticInita6471fb27a135e8dd95bcfc5e2ad62cd
 {
     public static $classMap = array (
+        'Autenticador' => __DIR__ . '/../..' . '/Model/Autenticador.php',
         'Cargo' => __DIR__ . '/../..' . '/Model/Cargo.php',
+        'DependencyContainer' => __DIR__ . '/../..' . '/Infra/DependencyContainer.php',
+        'Dependente' => __DIR__ . '/../..' . '/Model/Dependente.php',
         'Empresa' => __DIR__ . '/../..' . '/Model/Empresa.php',
+        'Filiado' => __DIR__ . '/../..' . '/Model/Filiado.php',
+        'Functions' => __DIR__ . '/../..' . '/Infra/Functions.php',
+        'Globals' => __DIR__ . '/../..' . '/Infra/Globals.php',
         'JSONConfig' => __DIR__ . '/../..' . '/Infra/JSONConfig.php',
-        'Login' => __DIR__ . '/../..' . '/Model/Login.php',
         'MoobiDataBaseHandler' => __DIR__ . '/../..' . '/Infra/MoobiDataBaseHandler.php',
         'Sessao' => __DIR__ . '/../..' . '/Infra/Sessao.php',
         'Situacao' => __DIR__ . '/../..' . '/Model/Situacao.php',
         'Usuario' => __DIR__ . '/../..' . '/Model/Usuario.php',
+        'View' => __DIR__ . '/../..' . '/Infra/View.php',
         'cargoController' => __DIR__ . '/../..' . '/Controller/cargoController.php',
         'cargoDAO' => __DIR__ . '/../..' . '/DAO/cargoDAO.php',
+        'dependenteController' => __DIR__ . '/../..' . '/Controller/dependenteController.php',
+        'dependenteDAO' => __DIR__ . '/../..' . '/DAO/dependenteDAO.php',
         'empresaController' => __DIR__ . '/../..' . '/Controller/empresaController.php',
         'empresaDAO' => __DIR__ . '/../..' . '/DAO/empresaDAO.php',
+        'filiadoController' => __DIR__ . '/../..' . '/Controller/filiadoController.php',
+        'filiadoDAO' => __DIR__ . '/../..' . '/DAO/filiadoDAO.php',
         'loginController' => __DIR__ . '/../..' . '/Controller/loginController.php',
         'situacaoController' => __DIR__ . '/../..' . '/Controller/situacaoController.php',
         'situacaoDAO' => __DIR__ . '/../..' . '/DAO/situacaoDAO.php',
@@ -29,7 +39,7 @@ class ComposerStaticInit3578481ad67fa219245f95517f97c611
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit3578481ad67fa219245f95517f97c611::$classMap;
+            $loader->classMap = ComposerStaticInita6471fb27a135e8dd95bcfc5e2ad62cd::$classMap;
 
         }, null, ClassLoader::class);
     }

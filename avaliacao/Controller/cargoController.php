@@ -2,18 +2,23 @@
 
 /**
  * Class cargoController
- * @version 1.0.0
+ * @version 1.3.0
  */
 class cargoController {
 	
-	private $oSessao;
+	private $oView;
+	private $oGlobais;
 	
 	/**
 	 * cargoController constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementacao do DC
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
+	 * @since 1.3.0 - Removida checagem de usuario ativo
 	 */
-	public function __construct() {
-		$this->oSessao = new Sessao();
+	public function __construct(Globals $oGlobais) {
+		$this->oView = DependencyContainer::getView();
+		$this->oGlobais = $oGlobais;
 	}
 	
 	/**
@@ -23,11 +28,13 @@ class cargoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho
 	 */
 	public function index(): void {
-		$sTitulo = 'Cargos';
 		$aCargos = (new cargoDAO())->findAll();
-		include __DIR__ . '/../View/cargos/listarCargos.php';
+		$this->oView->setTitulo('Cargos');
+		$this->oView->adicionaVariavel('aCargos', $aCargos);
+		$this->oView->exibeTemplate('cargos/listarCargos.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -37,10 +44,11 @@ class cargoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamado ao metodo chamaCabecalho
 	 */
 	public function cadastrar(): void {
-		$sTitulo = 'Criar novo cargo';
-		include __DIR__ . '/../View/cargos/inserirCargo.php';
+		$this->oView->setTitulo('Criar novo cargo');
+		$this->oView->exibeTemplate('cargos/inserirCargo.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -50,12 +58,14 @@ class cargoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Remoção de verificação de usuario ativo
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
 	 */
 	public function excluir(): void {
-		$oCargo = (new cargoDAO())->findByID($_GET['id']);
+		$oCargo = (new cargoDAO())->findByID($this->oGlobais->get('id'));
 		$oCargo->deleteCargo();
-		$this->oSessao->setMensagem('Cargo excluido com sucesso');
-		header("Location: ../../cargo/");
+		Sessao::setMensagem('Cargo excluido com sucesso');
+		header("Location: " . CAMINHO_PADRAO_WEB . "cargo/");
 	}
 	
 	/**
@@ -65,11 +75,14 @@ class cargoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Removida chamada ao metodo chamaCabecalho
+	 * @since 1.2.0 - Implementação do objeto Globais
 	 */
 	public function editar(): void {
-		$oCargo = (new cargoDAO())->findByID($_GET['id']);
-		$sTitulo = 'Editar Cargo';
-		include __DIR__ . '/../View/cargos/editarCargo.php';
+		$oCargo = (new cargoDAO())->findByID($this->oGlobais->get('id'));
+		$this->oView->setTitulo('Editar cargo');
+		$this->oView->adicionaVariavel('oCargo', $oCargo);
+		$this->oView->exibeTemplate('cargos/editarCargo.php', 'cabecalho.php');
 	}
 	
 	/**
@@ -79,12 +92,14 @@ class cargoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o parametro do header
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
 	 */
 	public function postCadastra(): void {
-		$oCargo = new Cargo($_POST['nome_cargo']);
+		$oCargo = new Cargo($this->oGlobais->post('nome_cargo'));
 		$oCargo->saveCargo();
-		$this->oSessao->setMensagem('Cargo cadastrado com sucesso');
-		header("Location: ../../cargo/");
+		Sessao::setMensagem('Cargo cadastrado com sucesso');
+		header("Location: " . CAMINHO_PADRAO_WEB . "cargo/");
 	}
 	
 	/**
@@ -94,12 +109,14 @@ class cargoController {
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Alterado o parametro do header
+	 * @since 1.2.0 - Implementação do objeto Globais e remoção do objeto Sessao
 	 */
 	public function postEdita(): void {
-		$oCargo = new Cargo($_POST['nome_cargo']);
-		$oCargo->replaceCargo($_POST['id']);
-		$this->oSessao->setMensagem('Cargo atualizado com sucesso');
-		header("Location: ../../cargo/");
+		$oCargo = new Cargo($this->oGlobais->post('nome_cargo'));
+		$oCargo->replaceCargo($this->oGlobais->post('id'));
+		Sessao::setMensagem('Cargo atualizado com sucesso');
+		header("Location: " . CAMINHO_PADRAO_WEB . "cargo/");
 	}
 	
 }

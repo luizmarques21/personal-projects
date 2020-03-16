@@ -2,7 +2,7 @@
 
 /**
  * Class usuarioDAO
- * @version 1.0.0
+ * @version 1.1.1
  */
 class usuarioDAO {
 	
@@ -10,24 +10,28 @@ class usuarioDAO {
 	
 	/**
 	 * usuarioDAO constructor.
-	 * @since 1.0.0
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.0 - Implementado o uso do DC
 	 */
 	public function __construct() {
-		$this->oDBHandler = new MoobiDataBaseHandler();
+		$this->oDBHandler = DependencyContainer::getDBHandler();
 	}
 	
 	/**
 	 * Pesquisa um usuario pelo nome
 	 *
 	 * @param string $sUser
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return Usuario
 	 *
+	 * @throws Exception
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 */
 	public function findByUsername(string $sUser): Usuario {
-		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_login = ?';
+		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_login = ? AND usi_data_remocao IS NULL';
 		$aResultado = $this->oDBHandler->queryOne($sQuery, [$sUser]);
+		if (is_bool($aResultado))
+			throw new Exception('Usuario não encontrado');
 		return Usuario::createFromArray($aResultado);
 	}
 	
@@ -38,9 +42,10 @@ class usuarioDAO {
 	 * @return array
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.1 - Adicionado parametro na query para filtrar registros removidos
 	 */
 	public function findAll(): array {
-		$sQuery = 'SELECT * FROM usi_usuario';
+		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_data_remocao IS NULL';
 		return $this->oDBHandler->query($sQuery);
 	}
 	
@@ -54,7 +59,7 @@ class usuarioDAO {
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
 	public function findByID(int $iID): Usuario {
-		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_id = ?';
+		$sQuery = 'SELECT * FROM usi_usuario WHERE usi_id = ? AND usi_data_remocao IS NULL';
 		$aUsuario = $this->oDBHandler->queryOne($sQuery, [$iID]);
 		return Usuario::createFromArray($aUsuario);
 	}
@@ -81,10 +86,11 @@ class usuarioDAO {
 	 * @return bool
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @since 1.1.1 - Alterado metodo para exclusao logica
 	 */
 	public function delete(int $iID): bool {
-		$sQuery = 'DELETE FROM usi_usuario WHERE usi_id = ?';
-		return $this->oDBHandler->execute($sQuery, [$iID]);
+		$sQuery = 'UPDATE usi_usuario SET usi_data_remocao = ? WHERE usi_id = ?';
+		return $this->oDBHandler->execute($sQuery, [date('Y-m-d H:i:s'), $iID]);
 	}
 	
 	/**

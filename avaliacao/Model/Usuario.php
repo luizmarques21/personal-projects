@@ -2,7 +2,7 @@
 
 /**
  * Class Usuario
- * @version 1.0.0
+ * @version 1.1.0
  */
 class Usuario {
 	
@@ -56,7 +56,7 @@ class Usuario {
 	 */
 	public function replaceUsuario(int $iID): void {
 		$this->setID($iID);
-		$this->verificaSenhaVazia();
+		$this->atualizaSenha();
 		$this->oDAO->replace($this->createToArray(), $iID);
 	}
 	
@@ -119,21 +119,8 @@ class Usuario {
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
-	private function getSenha(): string {
+	public function getSenha(): string {
 		return $this->sSenha;
-	}
-	
-	/**
-	 * Verifica se a senha informada é igual a senha do usuario
-	 *
-	 * @param string $sSenha
-	 * @author Luiz Mariel luizmariel@moobitech.com.br
-	 * @return bool
-	 *
-	 * @since 1.0.0 - Definição do versionamento da classe
-	 */
-	public function validaSenha(string $sSenha): bool {
-		return password_verify($sSenha, $this->sSenha);
 	}
 	
 	/**
@@ -174,20 +161,52 @@ class Usuario {
 	}
 	
 	/**
-	 * Verifica se a senha informada está vazia
+	 * Verifica se o usuario deixou a senha em branco na tela de atualização
+	 * Em caso positivo, a senha já cadastrada permanece inalterada
+	 * Em casa negativo, é aplicado o hash na nova senha para posterior atualização no banco
 	 *
 	 * @author Luiz Mariel luizmariel@moobitech.com.br
 	 * @return void
 	 *
 	 * @since 1.0.0 - Definição do versionamento da classe
 	 */
-	private function verificaSenhaVazia(): void {
+	private function atualizaSenha(): void {
 		if (strlen($this->sSenha) <= 0) {
 			$oUsuario = $this->oDAO->findByID($this->iID);
 			$this->sSenha = $oUsuario->getSenha();
 		} else {
 			$this->codificaSenha();
 		}
+	}
+	
+	/**
+	 * Verifica se um usuario é ADM
+	 *
+	 * @param string $sNome
+	 * @return bool
+	 *
+	 * @throws Exception
+	 * @since 1.0.0 - Definição do versionamento da classe
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 */
+	public static function isADM(string $sNome): bool {
+		$sTipo = (new usuarioDAO())->findByUsername($sNome)->getTipo();
+		return $sTipo == 'A' ? true : false;
+	}
+	
+	/**
+	 * Verifica se o objeto Usuario é o mesmo que está logado no sistema
+	 *
+	 * @param string $sUsuarioAtivo
+	 * @author Luiz Mariel luizmariel@moobitech.com.br
+	 * @return void
+	 * @throws Exception
+	 *
+	 * @since 1.1.0 - Definição do versionamento da classe
+	 */
+	public function isUsuarioAtivo(string $sUsuarioAtivo): void {
+		if ($this->getLogin() == $sUsuarioAtivo)
+			throw new Exception ('Usuario ativo no sistema');
 	}
 	
 }
