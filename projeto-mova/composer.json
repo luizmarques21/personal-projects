@@ -1,0 +1,11 @@
+{
+	"autoload": {
+		"psr-4": {
+			"Mensagem\\": "src/",
+			"Tests\\": "tests"
+		}
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^8"
+	}
+}
