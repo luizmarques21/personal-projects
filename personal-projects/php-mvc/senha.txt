@@ -1,7 +1,0 @@
-vendor/bin/doctrine dbal:run-sql "INSERT INTO usuarios (email, senha) values ('luizmariel@moobitech.com.br', '$argon2i$v=19$m=65536,t=4,p=1$bG9uV040dlFBeS5TZ0tYVQ$P/Tf8Rva9UgNBoQ6jo0gnOETNdmUMnf0M7ZWMTEfqOg')"
-
-vendor/bin/doctrine dbal:run-sql "UPDATE usuarios SET senha='$argon2i$v=19$m=65536,t=4,p=1$bG9uV040dlFBeS5TZ0tYVQ$P/Tf8Rva9UgNBoQ6jo0gnOETNdmUMnf0M7ZWMTEfqOg' WHERE id=2"
-
-vendor/bin/doctrine dbal:run-sql "UPDATE usuarios SET senha='e10adc3949ba59abbe56e057f20f883e' WHERE id=2"
-
-vendor/bin/doctrine dbal:run-sql "UPDATE usuarios SET senha='$2y$10$ZLetCJEic.4yQtXFSiGHDuFB/jfKrs2GPHwFynMFJGDEdsN2iDpN.' WHERE id=2"
