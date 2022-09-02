@@ -3,7 +3,7 @@ export abstract class View<T> {
     private escapar = false;
 
     constructor(seletor: string, escapar?: boolean) {
-        this.elemento = document.querySelector(seletor);
+        this.elemento = <HTMLElement>document.querySelector(seletor);
         if (escapar) {
             this.escapar = escapar;
         }
